@@ -1,32 +1,19 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gajacash_sample/core/api_service.dart';
-import 'package:gajacash_sample/features/onboarding/screens/verification_code_screen.dart';
+import 'package:gajacash_sample/features/onboarding/phone_entry_controller.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
 import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
 import 'package:gajacash_sample/core/widgets/mascot_bubble.dart';
 import 'package:gajacash_sample/core/widgets/phone_input_field.dart';
 
-class PhoneEntryScreen extends StatefulWidget {
+class PhoneEntryScreen extends StatelessWidget {
   const PhoneEntryScreen({super.key});
 
   @override
-  State<PhoneEntryScreen> createState() => _PhoneEntryScreenState();
-}
-
-class _PhoneEntryScreenState extends State<PhoneEntryScreen> {
-  final TextEditingController _phoneController = TextEditingController();
-  bool _isConfirmationVisible = false;
-
-  @override
-  void dispose() {
-    _phoneController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = Get.put(PhoneEntryController());
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
@@ -56,7 +43,9 @@ class _PhoneEntryScreenState extends State<PhoneEntryScreen> {
                             child: Align(
                               alignment: Alignment.bottomCenter,
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                ),
                                 child: _buildMascotSection(),
                               ),
                             ),
@@ -71,21 +60,21 @@ class _PhoneEntryScreenState extends State<PhoneEntryScreen> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildFormSection(),
+                                _buildFormSection(context, controller),
                                 const SizedBox(height: 16),
                                 PrimaryButton(
                                   text: "Continue",
                                   onPressed: () {
-                                    final phone = _phoneController.text.replaceAll(
-                                      RegExp(r'\D'),
-                                      '',
-                                    );
+                                    final phone = controller
+                                        .phoneController
+                                        .text
+                                        .replaceAll(RegExp(r'\D'), '');
                                     if (phone.length >= 7) {
-                                      setState(() {
-                                        _isConfirmationVisible = true;
-                                      });
+                                      controller.showConfirmation();
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         const SnackBar(
                                           content: Text(
                                             "Please enter a valid phone number (at least 7 digits)",
@@ -108,8 +97,12 @@ class _PhoneEntryScreenState extends State<PhoneEntryScreen> {
             ),
 
             // Backdrop and Confirmation Sheet
-            if (_isConfirmationVisible) _buildBackdrop(),
-            _buildConfirmationSheet(),
+            Obx(
+              () => controller.isConfirmationVisible.value
+                  ? _buildBackdrop(context, controller)
+                  : const SizedBox.shrink(),
+            ),
+            Obx(() => _buildConfirmationSheet(context, controller)),
           ],
         ),
       ),
@@ -126,7 +119,10 @@ class _PhoneEntryScreenState extends State<PhoneEntryScreen> {
     );
   }
 
-  Widget _buildFormSection() {
+  Widget _buildFormSection(
+    BuildContext context,
+    PhoneEntryController controller,
+  ) {
     final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +131,7 @@ class _PhoneEntryScreenState extends State<PhoneEntryScreen> {
           "Mobile number",
           style: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
             color: theme.colorScheme.onSurface,
           ),
         ),
@@ -144,23 +140,23 @@ class _PhoneEntryScreenState extends State<PhoneEntryScreen> {
           "Enter your mobile number",
           style: TextStyle(
             fontSize: 14,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w400,
             color: theme.colorScheme.primary.withValues(alpha: 0.7),
           ),
         ),
         const SizedBox(height: 16),
-        PhoneInputField(controller: _phoneController),
+        PhoneInputField(controller: controller.phoneController),
       ],
     );
   }
 
-  Widget _buildBackdrop() {
+  Widget _buildBackdrop(BuildContext context, PhoneEntryController controller) {
     final theme = Theme.of(context);
     return GestureDetector(
-      onTap: () => setState(() => _isConfirmationVisible = false),
+      onTap: () => controller.hideConfirmation(),
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 300),
-        opacity: _isConfirmationVisible ? 1.0 : 0.0,
+        opacity: controller.isConfirmationVisible.value ? 1.0 : 0.0,
         child: ClipRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
@@ -173,12 +169,17 @@ class _PhoneEntryScreenState extends State<PhoneEntryScreen> {
     );
   }
 
-  Widget _buildConfirmationSheet() {
+  Widget _buildConfirmationSheet(
+    BuildContext context,
+    PhoneEntryController controller,
+  ) {
     final theme = Theme.of(context);
+    final isVisible = controller.isConfirmationVisible.value;
+
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
-      bottom: _isConfirmationVisible ? 0 : -400,
+      bottom: isVisible ? 0 : -400,
       left: 0,
       right: 0,
       child: Container(
@@ -224,7 +225,7 @@ class _PhoneEntryScreenState extends State<PhoneEntryScreen> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  _phoneController.text,
+                  controller.phoneController.text,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -236,61 +237,15 @@ class _PhoneEntryScreenState extends State<PhoneEntryScreen> {
             const SizedBox(height: 32),
             PrimaryButton(
               text: "Confirm",
-              onPressed: () async {
-                var cleanPhone = _phoneController.text.replaceAll(
-                  RegExp(r'\D'),
-                  '',
-                );
-                if (cleanPhone.startsWith('0')) {
-                  cleanPhone = cleanPhone.substring(1);
-                }
-                if (!cleanPhone.startsWith('94')) {
-                  cleanPhone = '94$cleanPhone';
-                }
-                final phone = cleanPhone;
-
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) => Center(
-                    child: CircularProgressIndicator(
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                );
-
-                try {
-                  final response = await ApiService().sendOtp(phone);
-                  if (mounted) {
-                    Navigator.pop(context); // Pop loader
-                    if (response.statusCode == 200) {
-                      Get.to(() => VerificationCodeScreen(phoneNumber: phone));
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Failed to send OTP code"),
-                        ),
-                      );
-                    }
-                  }
-                } catch (e) {
-                  if (mounted) {
-                    Navigator.pop(context); // Pop loader
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Failed to send SMS: ${e.toString()}"),
-                      ),
-                    );
-                  }
-                }
-              },
+              onPressed: () =>
+                  controller.sendOtp(context, theme.colorScheme.primary),
             ),
             const SizedBox(height: 12),
             PrimaryButton(
               text: "Go back",
               backgroundColor: const Color(0xFFD9D9D9),
               textColor: const Color(0xFF1F1D1B),
-              onPressed: () => setState(() => _isConfirmationVisible = false),
+              onPressed: () => controller.hideConfirmation(),
             ),
           ],
         ),
