@@ -58,7 +58,7 @@ class PrimaryButton extends StatelessWidget {
               style: TextStyle(
                 color: isEnabled ? labelColor : labelColor.withValues(alpha: 0.4),
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
                 letterSpacing: -0.5,
               ),
             ),
