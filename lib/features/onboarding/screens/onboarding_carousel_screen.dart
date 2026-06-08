@@ -5,7 +5,6 @@ import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/features/onboarding/screens/phone_entry_screen.dart';
 import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
-import 'package:gajacash_sample/core/widgets/neumorphic_icon_button.dart';
 import 'package:gajacash_sample/features/onboarding/onboarding_carousel_controller.dart';
 
 class OnboardingCarouselScreen extends StatelessWidget {

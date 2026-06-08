@@ -23,17 +23,33 @@ class PrimaryButton extends StatelessWidget {
     final Color bgColor = backgroundColor ?? theme.colorScheme.secondary;
     final Color labelColor = textColor ?? theme.colorScheme.onSecondary;
 
+    // Generate lighter highlight color for gradient (20% white mix)
+    final Color highlightColor =
+        Color.lerp(bgColor, Colors.white, 0.2) ?? bgColor;
+    // Generate natural shadow color (15% black mix, 30% opacity)
+    final Color shadowColor =
+        Color.lerp(bgColor, Colors.black, 0.15)?.withValues(alpha: 0.3) ??
+        const Color(0xFFDBA326).withValues(alpha: 0.3);
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: isEnabled ? bgColor : const Color(0xFFD9D9D9),
         borderRadius: BorderRadius.circular(32),
+        border: isEnabled
+            ? Border.all(color: Colors.white.withValues(alpha: 0.4), width: 1.0)
+            : null,
+        color: isEnabled ? null : const Color(0xFFD9D9D9),
+        gradient: isEnabled
+            ? LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [highlightColor, bgColor],
+              )
+            : null,
         boxShadow: isEnabled
             ? [
                 BoxShadow(
-                  color: const Color(
-                    0xFFDBA326,
-                  ).withValues(alpha: 0.3), // 0.3 opacity of #DBA326
+                  color: shadowColor,
                   offset: const Offset(6, 6),
                   blurRadius: 12,
                 ),
@@ -61,7 +77,8 @@ class PrimaryButton extends StatelessWidget {
                     ? labelColor
                     : labelColor.withValues(alpha: 0.4),
                 fontSize: 20,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight
+                    .w500, //Semi-bold for a premium, readable look matching the image
                 letterSpacing: -0.5,
               ),
             ),
