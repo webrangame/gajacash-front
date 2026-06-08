@@ -31,7 +31,9 @@ class PrimaryButton extends StatelessWidget {
         boxShadow: isEnabled
             ? [
                 BoxShadow(
-                  color: const Color(0xFFDBA326).withValues(alpha: 0.3), // 0.3 opacity of #DBA326
+                  color: const Color(
+                    0xFFDBA326,
+                  ).withValues(alpha: 0.3), // 0.3 opacity of #DBA326
                   offset: const Offset(6, 6),
                   blurRadius: 12,
                 ),
@@ -55,9 +57,11 @@ class PrimaryButton extends StatelessWidget {
               text,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: isEnabled ? labelColor : labelColor.withValues(alpha: 0.4),
+                color: isEnabled
+                    ? labelColor
+                    : labelColor.withValues(alpha: 0.4),
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w400,
                 letterSpacing: -0.5,
               ),
             ),
