@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gajacash_sample/features/onboarding/screens/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:gajacash_sample/core/theme.dart';
@@ -82,7 +83,7 @@ class LoginChooserScreen extends StatelessWidget {
                             icon: LucideIcons.lock,
                             text: 'Phone Number → Password',
                             onTap: () {
-                              // TODO: Navigate to Phone -> Password flow
+                              Get.to(() => const LoginScreen());
                             },
                           ),
                           const SizedBox(height: 16),
