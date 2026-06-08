@@ -1,6 +1,7 @@
-﻿import 'dart:ui';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/features/onboarding/screens/splash_screen.dart';
@@ -51,7 +52,7 @@ class GajaCashApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'GajaCash',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,

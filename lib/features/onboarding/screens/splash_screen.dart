@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:gajacash_sample/features/onboarding/screens/onboarding_carousel_screen.dart';
 import 'package:gajacash_sample/core/constants/app_assets.dart';
 import 'package:gajacash_sample/core/constants/app_colors.dart';
@@ -41,13 +42,17 @@ class _SplashScreenState extends State<SplashScreen> {
     // Navigate to Onboarding Carousel after 6 seconds (2s wait + 4s loading)
     _navTimer = Timer(const Duration(seconds: 2), () {
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          PageRouteBuilder(
-            pageBuilder: (context, anim, secondary) => const OnboardingCarouselScreen(),
-            transitionsBuilder: (context, anim, secondary, child) =>
-                FadeTransition(opacity: anim, child: child),
-            transitionDuration: const Duration(milliseconds: 500),
+        // Restore normal status bar style
+        SystemChrome.setSystemUIOverlayStyle(
+          const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
           ),
+        );
+        Get.off(
+          () => const OnboardingCarouselScreen(),
+          transition: Transition.fadeIn,
+          duration: const Duration(milliseconds: 500),
         );
       }
     });
@@ -81,7 +86,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   height: 48,
                   child: CircularProgressIndicator(
                     strokeWidth: 4.0,
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryGreen),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.primaryGreen,
+                    ),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
