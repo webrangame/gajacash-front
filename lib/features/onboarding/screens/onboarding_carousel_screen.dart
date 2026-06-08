@@ -6,7 +6,6 @@ import 'package:gajacash_sample/features/onboarding/screens/login_chooser_screen
 import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
 import 'package:gajacash_sample/features/onboarding/onboarding_carousel_controller.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class OnboardingCarouselScreen extends StatelessWidget {
   const OnboardingCarouselScreen({super.key});

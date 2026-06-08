@@ -105,7 +105,7 @@ class _SpeechBubbleState extends State<SpeechBubble> {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w400,
                 color: AppColors.primaryGreen,
                 height: 1.3,
               ),
