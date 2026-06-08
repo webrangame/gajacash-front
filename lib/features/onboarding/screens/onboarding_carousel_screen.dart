@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/features/onboarding/screens/phone_entry_screen.dart';
 import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
+import 'package:gajacash_sample/features/onboarding/onboarding_carousel_controller.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-class OnboardingCarouselScreen extends StatefulWidget {
+class OnboardingCarouselScreen extends StatelessWidget {
   const OnboardingCarouselScreen({super.key});
 
-  @override
-  State<OnboardingCarouselScreen> createState() =>
-      _OnboardingCarouselScreenState();
-}
-
-class _OnboardingCarouselScreenState extends State<OnboardingCarouselScreen> {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-
-  final List<_SlideData> _slides = const [
+  static const List<_SlideData> _slides = [
     _SlideData(
       title: 'Over 8,000 Locations\nIslandwide',
       description: 'Your cash. Anytime, anywhere.',
@@ -37,8 +30,10 @@ class _OnboardingCarouselScreenState extends State<OnboardingCarouselScreen> {
   ];
 
   @override
-  void initState() {
-    super.initState();
+  Widget build(BuildContext context) {
+    final theme = context.theme;
+    final controller = Get.put(OnboardingCarouselController());
+
     // System UI Overlay brightness adjustments
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -48,24 +43,6 @@ class _OnboardingCarouselScreenState extends State<OnboardingCarouselScreen> {
         systemNavigationBarIconBrightness: Brightness.dark,
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void _onLoginRegister() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const PhoneEntryScreen()),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = context.theme;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface, // E8F4ED phone frame background
@@ -86,21 +63,23 @@ class _OnboardingCarouselScreenState extends State<OnboardingCarouselScreen> {
             // ── Carousel ──────────────────────────────────────────────────
             Expanded(
               child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (index) => setState(() => _currentPage = index),
+                controller: controller.pageController,
+                onPageChanged: controller.onPageChanged,
                 itemCount: _slides.length,
                 itemBuilder: (context, index) => _SlideWidget(slide: _slides[index]),
               ),
             ),
 
-            // ── Page Dots (Neumorphic Morphing) ──────────────────────────
+            // ── Page Dots (Neumorphic Morphing with Obx) ─────────────────
             Padding(
               padding: const EdgeInsets.only(top: 16, bottom: 24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  _slides.length,
-                  (i) => _Dot(isActive: i == _currentPage),
+              child: Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    _slides.length,
+                    (i) => _Dot(isActive: i == controller.currentPage),
+                  ),
                 ),
               ),
             ),
@@ -110,7 +89,7 @@ class _OnboardingCarouselScreenState extends State<OnboardingCarouselScreen> {
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
               child: PrimaryButton(
                 text: 'Login / Register',
-                onPressed: _onLoginRegister,
+                onPressed: () => Get.to(() => const PhoneEntryScreen()),
               ),
             ),
           ],

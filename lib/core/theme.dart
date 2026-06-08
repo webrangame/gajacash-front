@@ -268,8 +268,6 @@ class AppTheme {
 
 /// Extensions to access App Theme easily across the codebase.
 extension ContextThemeExtension on BuildContext {
-  ThemeData get theme => Theme.of(this);
-  ColorScheme get colorScheme => theme.colorScheme;
-  NeumorphicTheme get neumorphic => theme.extension<NeumorphicTheme>()!;
-  TextTheme get textTheme => theme.textTheme;
+  ColorScheme get colorScheme => Theme.of(this).colorScheme;
+  NeumorphicTheme get neumorphic => Theme.of(this).extension<NeumorphicTheme>()!;
 }
