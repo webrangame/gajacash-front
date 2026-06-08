@@ -123,7 +123,7 @@ class _SlideWidget extends StatelessWidget {
                 child: Image.asset(
                   slide.imagePath,
                   fit: BoxFit.contain,
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.center,
                 ),
               ),
             ),
@@ -137,7 +137,7 @@ class _SlideWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: context.textTheme.headlineMedium?.copyWith(
               color: context.colorScheme.primary,
-              fontSize: 28,
+              fontSize: 30,
               fontWeight: FontWeight.w500,
               height: 1.2,
             ),
@@ -157,7 +157,7 @@ class _SlideWidget extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
         ],
       ),
     );
