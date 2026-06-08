@@ -6,7 +6,6 @@ import 'package:gajacash_sample/features/onboarding/screens/login_chooser_screen
 import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
 import 'package:gajacash_sample/features/onboarding/onboarding_carousel_controller.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class OnboardingCarouselScreen extends StatelessWidget {
   const OnboardingCarouselScreen({super.key});
@@ -45,7 +44,8 @@ class OnboardingCarouselScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.surface, // E8F4ED phone frame background
+      backgroundColor:
+          theme.colorScheme.surface, // E8F4ED phone frame background
       body: SafeArea(
         child: Column(
           children: [
@@ -54,9 +54,7 @@ class OnboardingCarouselScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const CustomBackButton(),
-                ],
+                children: [const CustomBackButton()],
               ),
             ),
 
@@ -66,7 +64,8 @@ class OnboardingCarouselScreen extends StatelessWidget {
                 controller: controller.pageController,
                 onPageChanged: controller.onPageChanged,
                 itemCount: _slides.length,
-                itemBuilder: (context, index) => _SlideWidget(slide: _slides[index]),
+                itemBuilder: (context, index) =>
+                    _SlideWidget(slide: _slides[index]),
               ),
             ),
 

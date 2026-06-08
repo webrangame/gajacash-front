@@ -12,13 +12,13 @@ class NeumorphicTheme extends ThemeExtension<NeumorphicTheme> {
   final List<BoxShadow> navShadowAction;
   final List<BoxShadow> floatBtnShadow;
   final List<BoxShadow> btnLightShadow;
-  
+
   final Color accentAmber;
   final Color secondaryAmberText;
   final Color errorRed;
   final Color errorBg;
   final Color neutralMuted;
-  
+
   final BoxDecoration clayCardDecoration;
   final BoxDecoration clayInputDecoration;
 
@@ -86,7 +86,11 @@ class NeumorphicTheme extends ThemeExtension<NeumorphicTheme> {
       floatBtnShadow: other.floatBtnShadow,
       btnLightShadow: other.btnLightShadow,
       accentAmber: Color.lerp(accentAmber, other.accentAmber, t)!,
-      secondaryAmberText: Color.lerp(secondaryAmberText, other.secondaryAmberText, t)!,
+      secondaryAmberText: Color.lerp(
+        secondaryAmberText,
+        other.secondaryAmberText,
+        t,
+      )!,
       errorRed: Color.lerp(errorRed, other.errorRed, t)!,
       errorBg: Color.lerp(errorBg, other.errorBg, t)!,
       neutralMuted: Color.lerp(neutralMuted, other.neutralMuted, t)!,
@@ -101,21 +105,76 @@ class AppTheme {
   static ThemeData get lightTheme {
     // Configures Poppins with sans-serif system fallback matching UI mockup font preferences
     const TextTheme baseTheme = TextTheme(
-      displayLarge: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w800),
-      displayMedium: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w700),
-      displaySmall: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w700),
-      headlineLarge: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w700),
-      headlineMedium: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
-      headlineSmall: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
-      titleLarge: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
-      titleMedium: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w500),
-      titleSmall: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w500),
-      bodyLarge: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif']),
-      bodyMedium: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif']),
-      bodySmall: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif']),
-      labelLarge: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
-      labelMedium: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif']),
-      labelSmall: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif']),
+      displayLarge: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+        fontWeight: FontWeight.w800,
+      ),
+      displayMedium: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+        fontWeight: FontWeight.w700,
+      ),
+      displaySmall: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+        fontWeight: FontWeight.w700,
+      ),
+      headlineLarge: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+        fontWeight: FontWeight.w700,
+      ),
+      headlineMedium: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+        fontWeight: FontWeight.w600,
+      ),
+      headlineSmall: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+        fontWeight: FontWeight.w600,
+      ),
+      titleLarge: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+        fontWeight: FontWeight.w600,
+      ),
+      titleMedium: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+        fontWeight: FontWeight.w500,
+      ),
+      titleSmall: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+        fontWeight: FontWeight.w500,
+      ),
+      bodyLarge: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+      ),
+      bodyMedium: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+      ),
+      bodySmall: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+      ),
+      labelLarge: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+        fontWeight: FontWeight.w600,
+      ),
+      labelMedium: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+      ),
+      labelSmall: TextStyle(
+        fontFamily: 'Poppins',
+        fontFamilyFallback: ['sans-serif'],
+      ),
     );
 
     return ThemeData(
@@ -220,7 +279,10 @@ class AppTheme {
           clayCardDecoration: BoxDecoration(
             color: AppColors.phoneFrameBg,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.4), width: 1.0),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.4),
+              width: 1.0,
+            ),
             boxShadow: const [
               BoxShadow(
                 color: AppColors.clayShadowColor,
@@ -237,14 +299,14 @@ class AppTheme {
           clayInputDecoration: BoxDecoration(
             color: AppColors.phoneFrameBg,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.clayShadowColor.withValues(alpha: 0.8), width: 1.0),
+            border: Border.all(
+              color: AppColors.clayShadowColor.withValues(alpha: 0.8),
+              width: 1.0,
+            ),
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color(0xFFDFEAE4),
-                AppColors.phoneFrameBg,
-              ],
+              colors: [Color(0xFFDFEAE4), AppColors.phoneFrameBg],
             ),
           ),
         ),
@@ -253,21 +315,22 @@ class AppTheme {
   }
 
   static List<BoxShadow> get clayShadow => [
-        const BoxShadow(
-          color: AppColors.clayShadowColor,
-          offset: Offset(8, 8),
-          blurRadius: 16,
-        ),
-        const BoxShadow(
-          color: AppColors.white,
-          offset: Offset(-8, -8),
-          blurRadius: 16,
-        ),
-      ];
+    const BoxShadow(
+      color: AppColors.clayShadowColor,
+      offset: Offset(8, 8),
+      blurRadius: 16,
+    ),
+    const BoxShadow(
+      color: AppColors.white,
+      offset: Offset(-8, -8),
+      blurRadius: 16,
+    ),
+  ];
 }
 
 /// Extensions to access App Theme easily across the codebase.
 extension ContextThemeExtension on BuildContext {
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
-  NeumorphicTheme get neumorphic => Theme.of(this).extension<NeumorphicTheme>()!;
+  NeumorphicTheme get neumorphic =>
+      Theme.of(this).extension<NeumorphicTheme>()!;
 }
