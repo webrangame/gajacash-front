@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/features/onboarding/screens/phone_entry_screen.dart';
+import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
 import 'package:gajacash_sample/features/onboarding/onboarding_carousel_controller.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -48,90 +49,13 @@ class OnboardingCarouselScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Status Bar Area ──────────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.only(top: 16, left: 32, right: 32, bottom: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '9:41',
-                    style: TextStyle(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.6),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.2),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Container(
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.2),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Container(
-                        width: 28,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
             // ── Header Controls (Neumorphic Back Button) ─────────────────
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () => Get.back(),
-                    child: Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surface,
-                        shape: BoxShape.circle,
-                        boxShadow: const [
-                          BoxShadow(
-                            color: AppColors.clayShadowColor,
-                            offset: Offset(6, 6),
-                            blurRadius: 12,
-                          ),
-                          BoxShadow(
-                            color: Colors.white,
-                            offset: Offset(-6, -6),
-                            blurRadius: 12,
-                          ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          LucideIcons.arrowLeft,
-                          color: AppColors.primaryGreen,
-                          size: 28,
-                        ),
-                      ),
-                    ),
-                  ),
+                  const CustomBackButton(),
                 ],
               ),
             ),
@@ -214,8 +138,7 @@ class _SlideWidget extends StatelessWidget {
             style: context.textTheme.headlineMedium?.copyWith(
               color: context.colorScheme.primary,
               fontSize: 28,
-              fontWeight: FontWeight.w600,
-              letterSpacing: -0.5,
+              fontWeight: FontWeight.w500,
               height: 1.2,
             ),
           ),

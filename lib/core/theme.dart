@@ -99,23 +99,23 @@ class NeumorphicTheme extends ThemeExtension<NeumorphicTheme> {
 /// Global Application Theme configurations.
 class AppTheme {
   static ThemeData get lightTheme {
-    // Configures Nunito with sans-serif system fallback matching UI mockup font preferences
+    // Configures Poppins with sans-serif system fallback matching UI mockup font preferences
     const TextTheme baseTheme = TextTheme(
-      displayLarge: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w800),
-      displayMedium: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w700),
-      displaySmall: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w700),
-      headlineLarge: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w700),
-      headlineMedium: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
-      headlineSmall: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
-      titleLarge: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
-      titleMedium: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w500),
-      titleSmall: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w500),
-      bodyLarge: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif']),
-      bodyMedium: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif']),
-      bodySmall: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif']),
-      labelLarge: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
-      labelMedium: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif']),
-      labelSmall: TextStyle(fontFamily: 'Nunito', fontFamilyFallback: ['sans-serif']),
+      displayLarge: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w800),
+      displayMedium: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w700),
+      displaySmall: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w700),
+      headlineLarge: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w700),
+      headlineMedium: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
+      headlineSmall: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
+      titleLarge: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
+      titleMedium: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w500),
+      titleSmall: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w500),
+      bodyLarge: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif']),
+      bodyMedium: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif']),
+      bodySmall: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif']),
+      labelLarge: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif'], fontWeight: FontWeight.w600),
+      labelMedium: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif']),
+      labelSmall: TextStyle(fontFamily: 'Poppins', fontFamilyFallback: ['sans-serif']),
     );
 
     return ThemeData(
