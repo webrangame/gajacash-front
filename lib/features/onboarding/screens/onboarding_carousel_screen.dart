@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gajacash_sample/core/theme.dart';
-import 'package:gajacash_sample/features/onboarding/screens/phone_entry_screen.dart';
+import 'package:gajacash_sample/features/onboarding/screens/login_chooser_screen.dart';
 import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
 import 'package:gajacash_sample/features/onboarding/onboarding_carousel_controller.dart';
@@ -89,7 +89,7 @@ class OnboardingCarouselScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
               child: PrimaryButton(
                 text: 'Login / Register',
-                onPressed: () => Get.to(() => const PhoneEntryScreen()),
+                onPressed: () => Get.to(() => const LoginChooserScreen()),
               ),
             ),
           ],
