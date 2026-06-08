@@ -1,9 +1,9 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:gajacash_sample/core/theme.dart';
-import 'package:gajacash_sample/screens/onboarding/splash_screen.dart';
+import 'package:gajacash_sample/features/onboarding/screens/splash_screen.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 
