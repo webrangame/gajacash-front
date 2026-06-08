@@ -4,7 +4,7 @@ import 'package:gajacash_sample/core/api_service.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/widgets/registration_stepper.dart';
 import 'package:gajacash_sample/screens/registration/agent_details_screen.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class AgentTypeSelectionScreen extends StatefulWidget {
   const AgentTypeSelectionScreen({super.key});

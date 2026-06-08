@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/theme.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class RegistrationStepper extends StatelessWidget {
   final int currentStep;
@@ -37,7 +38,7 @@ class RegistrationStepper extends StatelessWidget {
                 ),
                 child: Center(
                   child: isCompleted 
-                    ? const Icon(Icons.check, size: 16, color: AppColors.primaryGreen)
+                    ? const Icon(LucideIcons.check, size: 16, color: AppColors.primaryGreen)
                     : Text(
                         "$step",
                         style: TextStyle(

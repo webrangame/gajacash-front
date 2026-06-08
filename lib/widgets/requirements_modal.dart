@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/theme.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class RequirementsModal extends StatelessWidget {
   final VoidCallback onClose;
@@ -56,7 +56,7 @@ class RequirementsModal extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          const Icon(LucideIcons.checkCircle2, color: AppColors.primaryGreen, size: 20),
+          const Icon(LucideIcons.checkCircle, color: AppColors.primaryGreen, size: 20),
           const SizedBox(width: 12),
           Expanded(child: Text(text, style: const TextStyle(fontSize: 14, color: AppColors.primaryText, fontWeight: FontWeight.w500))),
         ],

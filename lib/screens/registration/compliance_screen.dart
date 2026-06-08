@@ -5,7 +5,7 @@ import 'package:gajacash_sample/core/upload_helper.dart';
 import 'package:gajacash_sample/widgets/registration_stepper.dart';
 import 'package:gajacash_sample/screens/registration/license_screen.dart';
 import 'package:gajacash_sample/widgets/requirements_modal.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ComplianceScreen extends StatefulWidget {
   final Map<String, dynamic> regData;
@@ -283,7 +283,7 @@ class _ComplianceScreenState extends State<ComplianceScreen> {
                   ? const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.check_circle, color: Colors.green, size: 40),
+                        Icon(LucideIcons.checkCircle, color: Colors.green, size: 40),
                         SizedBox(height: 8),
                         Text("Uploaded Successfully", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
                       ],

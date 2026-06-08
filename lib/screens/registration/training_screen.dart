@@ -6,7 +6,7 @@ import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/screens/registration/registration_review_screen.dart';
 import 'package:gajacash_sample/widgets/registration_stepper.dart';
 import 'package:gajacash_sample/widgets/requirements_modal.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class TrainingScreen extends StatefulWidget {
   final Map<String, dynamic> regData;

@@ -4,7 +4,7 @@ import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/screens/onboarding/onboarding_carousel_screen.dart';
 import 'package:gajacash_sample/widgets/language_card.dart';
 import 'package:gajacash_sample/widgets/primary_button.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class LanguageSelectorScreen extends StatefulWidget {
   const LanguageSelectorScreen({super.key});

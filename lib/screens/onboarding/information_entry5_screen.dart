@@ -4,7 +4,7 @@ import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/screens/onboarding/home_screen.dart';
 import 'package:gajacash_sample/widgets/primary_button.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class InformationEntry5Screen extends StatefulWidget {
   final String phoneNumber;
@@ -206,7 +206,7 @@ class _InformationEntry5ScreenState extends State<InformationEntry5Screen> with 
           ),
           child: Center(
             child: completed 
-              ? const Icon(Icons.check, color: Colors.white, size: 20)
+              ? const Icon(LucideIcons.check, color: Colors.white, size: 20)
               : Text(
                   "$step",
                   style: TextStyle(
@@ -446,7 +446,7 @@ class _InformationEntry5ScreenState extends State<InformationEntry5Screen> with 
                 shape: BoxShape.circle,
                 boxShadow: [BoxShadow(color: AppColors.clayShadowColor, offset: Offset(6, 6), blurRadius: 12)],
               ),
-              child: const Icon(Icons.check, size: 32, color: AppColors.primaryGreen),
+              child: const Icon(LucideIcons.check, size: 32, color: AppColors.primaryGreen),
             ),
             const SizedBox(height: 24),
             const Text("Confirm your PIN", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),

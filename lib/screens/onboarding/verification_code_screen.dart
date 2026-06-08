@@ -6,7 +6,7 @@ import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/screens/onboarding/password_entry_screen.dart';
 import 'package:gajacash_sample/screens/onboarding/information_entry1_screen.dart';
 import 'package:gajacash_sample/widgets/primary_button.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
   final String phoneNumber;

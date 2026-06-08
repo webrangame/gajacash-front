@@ -6,7 +6,7 @@ import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/screens/onboarding/information_entry5_screen.dart';
 import 'package:gajacash_sample/widgets/primary_button.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class InformationEntry4Screen extends StatefulWidget {
   final String phoneNumber;
@@ -204,7 +204,7 @@ class _InformationEntry4ScreenState extends State<InformationEntry4Screen> {
           ),
           child: Center(
             child: completed 
-              ? const Icon(Icons.check, color: Colors.white, size: 20)
+              ? const Icon(LucideIcons.check, color: Colors.white, size: 20)
               : Text(
                   "$step",
                   style: TextStyle(
@@ -299,9 +299,9 @@ class _InformationEntry4ScreenState extends State<InformationEntry4Screen> {
                               padding: const EdgeInsets.all(24),
                               child: Row(
                                 children: [
-                                  Expanded(child: _SourceOption(icon: Icons.camera_alt_rounded, label: 'Camera', onTap: () => Navigator.pop(ctx, ImageSource.camera))),
+                                  Expanded(child: _SourceOption(icon: LucideIcons.camera, label: 'Camera', onTap: () => Navigator.pop(ctx, ImageSource.camera))),
                                   const SizedBox(width: 16),
-                                  Expanded(child: _SourceOption(icon: Icons.photo_library_rounded, label: 'Gallery', onTap: () => Navigator.pop(ctx, ImageSource.gallery))),
+                                  Expanded(child: _SourceOption(icon: LucideIcons.images, label: 'Gallery', onTap: () => Navigator.pop(ctx, ImageSource.gallery))),
                                 ],
                               ),
                             ),
@@ -462,7 +462,7 @@ class _InformationEntry4ScreenState extends State<InformationEntry4Screen> {
                   shape: BoxShape.circle,
                   boxShadow: [BoxShadow(color: AppColors.clayShadowColor, offset: Offset(6, 6), blurRadius: 12)],
                 ),
-                child: const Icon(Icons.person_outline_rounded, size: 40, color: AppColors.primaryGreen),
+                child: const Icon(LucideIcons.user, size: 40, color: AppColors.primaryGreen),
               )
             else
               Container(

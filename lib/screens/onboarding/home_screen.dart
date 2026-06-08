@@ -7,7 +7,7 @@ import 'package:gajacash_sample/screens/registration/agent_dashboard_selector_sc
 import 'package:gajacash_sample/screens/vault/vault_screen.dart';
 import 'package:gajacash_sample/screens/transfer/transfer_qr_screen.dart';
 import 'package:gajacash_sample/widgets/safe_network_image.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 // ─── Vendor profile data model (replace with API call later) ───────────────
 class _VendorProfile {

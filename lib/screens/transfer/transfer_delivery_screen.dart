@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/theme.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:gajacash_sample/core/api_service.dart';
 
 class TransferDeliveryScreen extends StatefulWidget {

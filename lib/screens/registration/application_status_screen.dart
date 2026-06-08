@@ -2,7 +2,7 @@ import 'package:gajacash_sample/widgets/safe_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/api_service.dart';
 import 'package:gajacash_sample/core/theme.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ApplicationStatusScreen extends StatefulWidget {
   const ApplicationStatusScreen({super.key});
@@ -203,7 +203,7 @@ class _ApplicationStatusScreenState extends State<ApplicationStatusScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.circle, size: 6, color: statusColor),
+                    Icon(LucideIcons.circle, size: 6, color: statusColor),
                     const SizedBox(width: 6),
                     Text(statusLabel, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: statusTextColor)),
                   ],
@@ -270,7 +270,7 @@ class _ApplicationStatusScreenState extends State<ApplicationStatusScreen> {
                     BoxShadow(color: const Color(0xFFFFCC66).withValues(alpha: 0.3), blurRadius: 8),
                   ] : null,
                 ),
-                child: isCompleted ? const Icon(Icons.check, size: 14, color: Colors.white) : (isActive ? const Center(child: Icon(Icons.circle, size: 8, color: Color(0xFFFFCC66))) : null),
+                child: isCompleted ? const Icon(LucideIcons.check, size: 14, color: Colors.white) : (isActive ? const Center(child: Icon(LucideIcons.circle, size: 8, color: Color(0xFFFFCC66))) : null),
               ),
               if (!isLast)
                 Expanded(

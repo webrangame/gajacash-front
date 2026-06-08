@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/theme.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// A drop-in replacement for [Image.network] that never throws or crashes.
 /// Shows a shimmer placeholder while loading and a silent empty box on error.
@@ -37,7 +38,7 @@ class SafeNetworkImage extends StatelessWidget {
               height: height,
               child: Center(
                 child: Icon(
-                  Icons.image_outlined,
+                  LucideIcons.image,
                   color: AppColors.primaryGreen.withValues(alpha: 0.3),
                   size: 32,
                 ),

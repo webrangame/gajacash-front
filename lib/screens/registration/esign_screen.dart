@@ -5,7 +5,7 @@ import 'package:gajacash_sample/core/api_service.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/screens/registration/registration_success_screen.dart';
 import 'package:gajacash_sample/widgets/requirements_modal.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ESignScreen extends StatefulWidget {
   final Map<String, dynamic> regData;
@@ -245,7 +245,7 @@ class _ESignScreenState extends State<ESignScreen> {
               borderRadius: BorderRadius.circular(6),
               border: Border.all(color: AppColors.primaryGreen.withValues(alpha: 0.2)),
             ),
-            child: _agreed ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
+            child: _agreed ? const Icon(LucideIcons.check, size: 16, color: Colors.white) : null,
           ),
           const SizedBox(width: 12),
           const Expanded(

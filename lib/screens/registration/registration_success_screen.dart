@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/screens/registration/application_status_screen.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class RegistrationSuccessScreen extends StatelessWidget {
   const RegistrationSuccessScreen({super.key});

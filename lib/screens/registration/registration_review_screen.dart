@@ -4,7 +4,7 @@ import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/widgets/registration_stepper.dart';
 import 'package:gajacash_sample/widgets/requirements_modal.dart';
 import 'package:gajacash_sample/screens/registration/esign_screen.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class RegistrationReviewScreen extends StatefulWidget {
   final Map<String, dynamic> regData;
@@ -261,7 +261,7 @@ class _RegistrationReviewScreenState extends State<RegistrationReviewScreen> {
                 border: Border.all(color: isSelected ? Colors.white : AppColors.primaryGreen.withValues(alpha: 0.2), width: 2),
               ),
               child: isSelected
-                  ? const Center(child: Icon(Icons.check, size: 16, color: Colors.white))
+                  ? const Center(child: Icon(LucideIcons.check, size: 16, color: Colors.white))
                   : null,
             ),
           ],

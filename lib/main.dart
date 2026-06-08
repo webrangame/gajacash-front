@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/screens/onboarding/splash_screen.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,7 +82,7 @@ class _AppErrorWidget extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
-                  Icons.warning_amber_rounded,
+                  LucideIcons.alertCircle,
                   color: Color(0xFF006633),
                   size: 36,
                 ),

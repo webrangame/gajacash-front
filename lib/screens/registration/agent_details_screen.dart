@@ -7,7 +7,7 @@ import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/widgets/registration_stepper.dart';
 import 'package:gajacash_sample/screens/registration/identity_verification_screen.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class AgentDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> regData;
@@ -266,7 +266,7 @@ class _AgentDetailsScreenState extends State<AgentDetailsScreen> {
                       : Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(LucideIcons.user, color: AppColors.primaryGreen.withValues(alpha: 0.4), size: 36),
+                              Icon(LucideIcons.user, color: AppColors.primaryGreen.withValues(alpha: 0.4), size: 36),
                             const SizedBox(height: 4),
                             Text(
                               "Photo",
@@ -416,7 +416,7 @@ class _AgentDetailsScreenState extends State<AgentDetailsScreen> {
         child: DropdownButton<String>(
           value: _selectedCountry,
           isExpanded: true,
-          icon: const Icon(LucideIcons.chevronDown, color: AppColors.primaryGreen, size: 20),
+          icon: const Icon(Icons.expand_more, color: AppColors.primaryGreen, size: 20),
           items: ["Sri Lanka", "India", "Japan"].map((String value) {
             return DropdownMenuItem<String>(
               value: value,

@@ -4,7 +4,7 @@ import 'package:gajacash_sample/core/upload_helper.dart';
 import 'package:gajacash_sample/widgets/registration_stepper.dart';
 import 'package:gajacash_sample/screens/registration/compliance_screen.dart';
 import 'package:gajacash_sample/widgets/requirements_modal.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class IdentityVerificationScreen extends StatefulWidget {
   final Map<String, dynamic> regData;
@@ -203,7 +203,7 @@ class _IdentityVerificationScreenState extends State<IdentityVerificationScreen>
               child: isUploading
                   ? const CircularProgressIndicator(color: AppColors.primaryGreen)
                   : (uploadedUrl != null
-                      ? const Icon(Icons.check_circle, color: Colors.green, size: 36)
+                      ? const Icon(LucideIcons.checkCircle, color: Colors.green, size: 36)
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -249,7 +249,7 @@ class _IdentityVerificationScreenState extends State<IdentityVerificationScreen>
                   ? const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.check_circle, color: Colors.green, size: 40),
+                        Icon(LucideIcons.checkCircle, color: Colors.green, size: 40),
                         SizedBox(height: 8),
                         Text("Proof of address uploaded", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
                       ],
@@ -311,7 +311,7 @@ class _IdentityVerificationScreenState extends State<IdentityVerificationScreen>
               borderRadius: BorderRadius.circular(6),
               border: Border.all(color: AppColors.primaryGreen.withValues(alpha: 0.2)),
             ),
-            child: _addressMatches ? const Icon(Icons.check, size: 18, color: Colors.white) : null,
+            child: _addressMatches ? const Icon(LucideIcons.check, size: 18, color: Colors.white) : null,
           ),
         ),
         const SizedBox(width: 12),

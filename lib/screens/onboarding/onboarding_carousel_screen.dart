@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/screens/onboarding/phone_entry_screen.dart';
 import 'package:gajacash_sample/widgets/primary_button.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+
 
 
 
@@ -136,7 +138,7 @@ class _SlideWidget extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               errorBuilder: (context, error, stack) => Center(
                 child: Icon(
-                  Icons.image_not_supported_outlined,
+                  LucideIcons.imageOff,
                   color: AppColors.primaryGreen.withValues(alpha: 0.4),
                   size: 64,
                 ),

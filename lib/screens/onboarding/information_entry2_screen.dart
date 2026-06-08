@@ -4,7 +4,7 @@ import 'package:gajacash_sample/screens/onboarding/information_entry3_screen.dar
 import 'package:gajacash_sample/screens/onboarding/map_picker_screen.dart';
 import 'package:gajacash_sample/widgets/primary_button.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class InformationEntry2Screen extends StatefulWidget {
   final String phoneNumber;
@@ -179,7 +179,7 @@ class _InformationEntry2ScreenState extends State<InformationEntry2Screen> {
           ),
           child: Center(
             child: completed
-                ? const Icon(Icons.check, color: Colors.white, size: 20)
+              ? const Icon(LucideIcons.check, color: Colors.white, size: 20)
                 : Text(
                     "$step",
                     style: TextStyle(
@@ -314,7 +314,7 @@ class _InformationEntry2ScreenState extends State<InformationEntry2Screen> {
               ),
             ),
             Icon(
-              LucideIcons.chevronRight,
+              Icons.chevron_right,
               color: AppColors.primaryGreen.withValues(alpha: 0.5),
               size: 20,
             ),

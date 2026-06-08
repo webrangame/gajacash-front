@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/theme.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'package:gajacash_sample/core/api_service.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class VendorCashoutScreen extends StatefulWidget {
   const VendorCashoutScreen({super.key});
@@ -357,7 +357,7 @@ class _VendorCashoutScreenState extends State<VendorCashoutScreen> {
               child: DropdownButton<String>(
                 value: _selectedBank,
                 isExpanded: true,
-                icon: const Icon(LucideIcons.chevronDown, color: AppColors.primaryGreen, size: 20),
+                icon: const Icon(Icons.expand_more, color: AppColors.primaryGreen, size: 20),
                 items: _bankList.map((b) => DropdownMenuItem(value: b, child: Text(b, style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.primaryText)))).toList(),
                 onChanged: (v) => setState(() => _selectedBank = v!),
               ),
@@ -372,7 +372,7 @@ class _VendorCashoutScreenState extends State<VendorCashoutScreen> {
             controller: _accountController,
             hint: "Enter account number",
             keyboardType: TextInputType.number,
-            prefixIcon: LucideIcons.creditCard,
+            prefixIcon: Icons.credit_card,
           ),
           const SizedBox(height: 40),
 
@@ -410,15 +410,15 @@ class _VendorCashoutScreenState extends State<VendorCashoutScreen> {
             ),
             child: Column(
               children: [
-                _reviewRow("Bank", _selectedBank, icon: LucideIcons.landmark),
+                _reviewRow("Bank", _selectedBank, icon: Icons.domain),
                 const Divider(height: 24, color: Color(0xFFDDE8E3)),
-                _reviewRow("Account", _accountController.text, icon: LucideIcons.creditCard),
+                _reviewRow("Account", _accountController.text, icon: Icons.credit_card),
                 const Divider(height: 24, color: Color(0xFFDDE8E3)),
-                _reviewRow("Amount", "LKR ${amount.toStringAsFixed(2)}", icon: LucideIcons.banknote),
+                _reviewRow("Amount", "LKR ${amount.toStringAsFixed(2)}", icon: Icons.attach_money),
                 const Divider(height: 24, color: Color(0xFFDDE8E3)),
-                _reviewRow("Fee (${_cashoutFeePercent.toStringAsFixed(0)}%)", "- LKR ${fee.toStringAsFixed(2)}", icon: LucideIcons.percent),
+                _reviewRow("Fee (${_cashoutFeePercent.toStringAsFixed(0)}%)", "- LKR ${fee.toStringAsFixed(2)}", icon: Icons.percent),
                 const Divider(height: 24, color: Color(0xFFDDE8E3)),
-                _reviewRow("You Receive", "LKR ${net.toStringAsFixed(2)}", icon: LucideIcons.wallet, bold: true),
+                _reviewRow("You Receive", "LKR ${net.toStringAsFixed(2)}", icon: Icons.account_balance_wallet, bold: true),
               ],
             ),
           ),
@@ -432,7 +432,7 @@ class _VendorCashoutScreenState extends State<VendorCashoutScreen> {
             ),
             child: Row(
               children: [
-                const Icon(LucideIcons.clock, color: Color(0xFFE6AC00), size: 18),
+                const Icon(Icons.access_time, color: Color(0xFFE6AC00), size: 18),
                 const SizedBox(width: 12),
                 const Expanded(
                   child: Text(
@@ -540,7 +540,7 @@ class _VendorCashoutScreenState extends State<VendorCashoutScreen> {
             ),
             child: Center(
               child: k == '⌫'
-                  ? const Icon(LucideIcons.delete, color: AppColors.primaryGreen, size: 22)
+                  ? const Icon(Icons.delete, color: AppColors.primaryGreen, size: 22)
                   : Text(k, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.primaryText)),
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gajacash_sample/core/api_service.dart';
 import 'package:gajacash_sample/core/theme.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Shows a bottom-sheet with Camera / Gallery options, uploads the selected
 /// file, and returns the remote URL string (or null if cancelled/failed).
@@ -35,7 +36,7 @@ Future<String?> pickAndUploadDocument(BuildContext context, {String label = 'Doc
                 children: [
                   Expanded(
                     child: _SourceTile(
-                      icon: Icons.camera_alt_rounded,
+                      icon: LucideIcons.camera,
                       label: 'Camera',
                       onTap: () => Navigator.pop(ctx, ImageSource.camera),
                     ),
@@ -43,7 +44,7 @@ Future<String?> pickAndUploadDocument(BuildContext context, {String label = 'Doc
                   const SizedBox(width: 16),
                   Expanded(
                     child: _SourceTile(
-                      icon: Icons.photo_library_rounded,
+                      icon: LucideIcons.images,
                       label: 'Gallery',
                       onTap: () => Navigator.pop(ctx, ImageSource.gallery),
                     ),

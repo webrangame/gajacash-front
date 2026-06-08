@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/screens/onboarding/information_entry2_screen.dart';
 import 'package:gajacash_sample/widgets/primary_button.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class InformationEntry1Screen extends StatefulWidget {
   final String phoneNumber;
@@ -84,7 +84,7 @@ class _InformationEntry1ScreenState extends State<InformationEntry1Screen> {
         setState(() => _selectedGender = value);
         Navigator.pop(context);
       },
-      trailing: _selectedGender == value ? const Icon(Icons.check, color: AppColors.primaryGreen) : null,
+      trailing: _selectedGender == value ? const Icon(LucideIcons.check, color: AppColors.primaryGreen) : null,
     );
   }
 
