@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/features/onboarding/screens/phone_entry_screen.dart';
+import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
 import 'package:gajacash_sample/core/widgets/neumorphic_icon_button.dart';
 import 'package:gajacash_sample/features/onboarding/onboarding_carousel_controller.dart';
@@ -49,15 +50,12 @@ class OnboardingCarouselScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
+            // ── Header Controls (Neumorphic Back Button) ─────────────────
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  NeumorphicIconButton(
-                    onTap: () => Get.back(),
-                  ),
-                ],
+                children: [const CustomBackButton()],
               ),
             ),
 
@@ -140,8 +138,7 @@ class _SlideWidget extends StatelessWidget {
             style: context.textTheme.headlineMedium?.copyWith(
               color: context.colorScheme.primary,
               fontSize: 28,
-              fontWeight: FontWeight.w600,
-              letterSpacing: -0.5,
+              fontWeight: FontWeight.w500,
               height: 1.2,
             ),
           ),

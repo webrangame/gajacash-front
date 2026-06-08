@@ -61,7 +61,7 @@ class PrimaryButton extends StatelessWidget {
                     ? labelColor
                     : labelColor.withValues(alpha: 0.4),
                 fontSize: 20,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w500,
                 letterSpacing: -0.5,
               ),
             ),
