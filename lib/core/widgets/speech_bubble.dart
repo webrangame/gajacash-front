@@ -16,7 +16,10 @@ class SpeechBubble extends StatefulWidget {
     this.interval = const Duration(seconds: 5),
     this.padding,
     this.fontSize,
-  }) : assert(text != null || texts != null, 'Either text or texts must be provided');
+  }) : assert(
+         text != null || texts != null,
+         'Either text or texts must be provided',
+       );
 
   @override
   State<SpeechBubble> createState() => _SpeechBubbleState();
@@ -75,7 +78,9 @@ class _SpeechBubbleState extends State<SpeechBubble> {
 
   @override
   Widget build(BuildContext context) {
-    final String displayText = _messages.isNotEmpty ? _messages[_currentIndex] : '';
+    final String displayText = _messages.isNotEmpty
+        ? _messages[_currentIndex]
+        : '';
 
     return Column(
       mainAxisSize: MainAxisSize.min,
