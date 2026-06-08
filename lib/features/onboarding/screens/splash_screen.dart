@@ -1,6 +1,7 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:gajacash_sample/features/onboarding/screens/onboarding_carousel_screen.dart';
 
 // Official GajaCash brand colors for splash
@@ -58,13 +59,10 @@ class _SplashScreenState extends State<SplashScreen>
             statusBarIconBrightness: Brightness.dark,
           ),
         );
-        Navigator.of(context).pushReplacement(
-          PageRouteBuilder(
-            pageBuilder: (context, anim, secondary) => const OnboardingCarouselScreen(),
-            transitionsBuilder: (context, anim, secondary, child) =>
-                FadeTransition(opacity: anim, child: child),
-            transitionDuration: const Duration(milliseconds: 500),
-          ),
+        Get.off(
+          () => const OnboardingCarouselScreen(),
+          transition: Transition.fadeIn,
+          duration: const Duration(milliseconds: 500),
         );
       }
     });

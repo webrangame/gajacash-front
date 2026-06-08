@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gajacash_sample/core/theme.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
@@ -18,7 +17,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isEnabled = onPressed != null;
-    final theme = context.theme;
+    final theme = Theme.of(context);
 
     // Resolve color settings from theme parameters
     final Color bgColor = backgroundColor ?? theme.colorScheme.secondary;
