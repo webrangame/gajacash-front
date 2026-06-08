@@ -1,12 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/features/onboarding/screens/phone_entry_screen.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-
-
-
 
 class OnboardingCarouselScreen extends StatefulWidget {
   const OnboardingCarouselScreen({super.key});
@@ -16,8 +13,7 @@ class OnboardingCarouselScreen extends StatefulWidget {
       _OnboardingCarouselScreenState();
 }
 
-class _OnboardingCarouselScreenState extends State<OnboardingCarouselScreen>
-    with SingleTickerProviderStateMixin {
+class _OnboardingCarouselScreenState extends State<OnboardingCarouselScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -25,27 +21,24 @@ class _OnboardingCarouselScreenState extends State<OnboardingCarouselScreen>
     _SlideData(
       title: 'Over 8,000 Locations\nIslandwide',
       description: 'Your cash. Anytime, anywhere.',
-      imageUrl:
-          'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c8fb5fa9-3c3a-454c-86ff-24557ee474e9_800w.png',
+      imagePath: 'assets/images/onboarding1.png',
     ),
     _SlideData(
       title: 'Skip the ATM Queues',
       description: 'Quick cash access for real-life situations.',
-      imageUrl:
-          'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5c9c43a1-2e42-401c-92df-6429bef221ab_800w.png',
+      imagePath: 'assets/images/onboarding2.png',
     ),
     _SlideData(
       title: 'Cash is King',
       description: 'Keep your business, your business\nwith GajaCash.',
-      imageUrl:
-          'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f5b4b9b6-fc99-41c2-b07a-7412e30826e0_800w.png',
+      imagePath: 'assets/images/onboarding3.png',
     ),
   ];
 
   @override
   void initState() {
     super.initState();
-    // Restore dark icons for light background
+    // System UI Overlay brightness adjustments
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -71,26 +64,114 @@ class _OnboardingCarouselScreenState extends State<OnboardingCarouselScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
+
     return Scaffold(
-      backgroundColor: AppColors.phoneFrameBg,
+      backgroundColor: theme.colorScheme.surface, // E8F4ED phone frame background
       body: SafeArea(
         child: Column(
           children: [
-            // ── Carousel (no top logo — illustration fills from top) ─────
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (index) =>
-                    setState(() => _currentPage = index),
-                itemCount: _slides.length,
-                itemBuilder: (context, index) =>
-                    _SlideWidget(slide: _slides[index]),
+            // ── Status Bar Area ──────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.only(top: 16, left: 32, right: 32, bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '9:41',
+                    style: TextStyle(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.6),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        width: 28,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
 
-            // ── Page Dots ────────────────────────────────────────────────
+            // ── Header Controls (Neumorphic Back Button) ─────────────────
             Padding(
-              padding: const EdgeInsets.only(top: 16, bottom: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.maybeOf(context)?.pop(),
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface,
+                        shape: BoxShape.circle,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: AppColors.clayShadowColor,
+                            offset: Offset(6, 6),
+                            blurRadius: 12,
+                          ),
+                          BoxShadow(
+                            color: Colors.white,
+                            offset: Offset(-6, -6),
+                            blurRadius: 12,
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          LucideIcons.arrowLeft,
+                          color: AppColors.primaryGreen,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // ── Carousel ──────────────────────────────────────────────────
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: (index) => setState(() => _currentPage = index),
+                itemCount: _slides.length,
+                itemBuilder: (context, index) => _SlideWidget(slide: _slides[index]),
+              ),
+            ),
+
+            // ── Page Dots (Neumorphic Morphing) ──────────────────────────
+            Padding(
+              padding: const EdgeInsets.only(top: 16, bottom: 24),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
@@ -102,7 +183,7 @@ class _OnboardingCarouselScreenState extends State<OnboardingCarouselScreen>
 
             // ── Login / Register Button (gold/yellow) ─────────────────────
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 8, 24, 36),
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
               child: PrimaryButton(
                 text: 'Login / Register',
                 onPressed: _onLoginRegister,
@@ -130,21 +211,18 @@ class _SlideWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // ── Illustration (full bleed, no card box) ───────────────────
+          // ── Illustration (full bleed, loaded from local assets) ──────────
           Expanded(
-            child: Image.network(
-              slide.imageUrl,
-              fit: BoxFit.contain,
-              alignment: Alignment.bottomCenter,
-              errorBuilder: (context, error, stack) => Center(
-                child: Icon(
-                  LucideIcons.imageOff,
-                  color: AppColors.primaryGreen.withValues(alpha: 0.4),
-                  size: 64,
+            child: AspectRatio(
+              aspectRatio: 4 / 5,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(32),
+                child: Image.asset(
+                  slide.imagePath,
+                  fit: BoxFit.contain,
+                  alignment: Alignment.bottomCenter,
                 ),
               ),
-              loadingBuilder: (_, child, progress) =>
-                  progress == null ? child : const SizedBox.shrink(),
             ),
           ),
 
@@ -154,10 +232,10 @@ class _SlideWidget extends StatelessWidget {
           Text(
             slide.title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: context.textTheme.headlineMedium?.copyWith(
+              color: context.colorScheme.primary,
               fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: AppColors.primaryGreen,
+              fontWeight: FontWeight.w600,
               letterSpacing: -0.5,
               height: 1.2,
             ),
@@ -169,11 +247,11 @@ class _SlideWidget extends StatelessWidget {
           Text(
             slide.description,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: context.textTheme.bodyMedium?.copyWith(
               fontSize: 15,
               fontWeight: FontWeight.w500,
               height: 1.55,
-              color: AppColors.primaryText.withValues(alpha: 0.55),
+              color: context.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
 
@@ -194,17 +272,25 @@ class _Dot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
+
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 350),
-      curve: Curves.easeInOut,
-      margin: const EdgeInsets.symmetric(horizontal: 5),
-      height: 10,
-      width: isActive ? 28 : 10,
+      duration: const Duration(milliseconds: 500),
+      curve: const ElasticInCurve(0.9), // Smooth morphing feel
+      margin: const EdgeInsets.symmetric(horizontal: 6),
+      height: 12,
+      width: isActive ? 32 : 12,
       decoration: BoxDecoration(
-        color: isActive
-            ? AppColors.primaryGreen
-            : AppColors.clayShadowColor,
-        borderRadius: BorderRadius.circular(5),
+        color: isActive ? theme.colorScheme.primary : AppColors.clayShadowColor,
+        borderRadius: BorderRadius.circular(6),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            offset: Offset(0, 1),
+            blurRadius: 1,
+            blurStyle: BlurStyle.inner,
+          ),
+        ],
       ),
     );
   }
@@ -217,10 +303,10 @@ class _SlideData {
   const _SlideData({
     required this.title,
     required this.description,
-    required this.imageUrl,
+    required this.imagePath,
   });
 
   final String title;
   final String description;
-  final String imageUrl;
+  final String imagePath;
 }

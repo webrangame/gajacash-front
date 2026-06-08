@@ -32,6 +32,7 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+/gajacash_ui_design-main
 
 # Symbolication related
 app.*.symbols
