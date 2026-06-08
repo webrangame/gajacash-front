@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gajacash_sample/core/theme.dart';
-import 'package:gajacash_sample/features/onboarding/screens/phone_entry_screen.dart';
+import 'package:gajacash_sample/features/onboarding/screens/login_chooser_screen.dart';
 import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
 import 'package:gajacash_sample/features/onboarding/onboarding_carousel_controller.dart';
@@ -88,7 +88,7 @@ class OnboardingCarouselScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
               child: PrimaryButton(
                 text: 'Login / Register',
-                onPressed: () => Get.to(() => const PhoneEntryScreen()),
+                onPressed: () => Get.to(() => const LoginChooserScreen()),
               ),
             ),
           ],
@@ -122,7 +122,7 @@ class _SlideWidget extends StatelessWidget {
                 child: Image.asset(
                   slide.imagePath,
                   fit: BoxFit.contain,
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.center,
                 ),
               ),
             ),
@@ -136,7 +136,7 @@ class _SlideWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: context.textTheme.headlineMedium?.copyWith(
               color: context.colorScheme.primary,
-              fontSize: 28,
+              fontSize: 30,
               fontWeight: FontWeight.w500,
               height: 1.2,
             ),
@@ -156,7 +156,7 @@ class _SlideWidget extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
         ],
       ),
     );
