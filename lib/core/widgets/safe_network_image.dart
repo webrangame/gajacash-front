@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -39,7 +39,7 @@ class SafeNetworkImage extends StatelessWidget {
               child: Center(
                 child: Icon(
                   LucideIcons.image,
-                  color: AppColors.primaryGreen.withValues(alpha: 0.3),
+                  color: context.colorScheme.primary.withValues(alpha: 0.3),
                   size: 32,
                 ),
               ),
@@ -100,7 +100,7 @@ class _ShimmerBoxState extends State<_ShimmerBox>
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: Color.lerp(
-              AppColors.phoneFrameBg,
+              context.colorScheme.surface,
               AppColors.clayShadowColor,
               _animation.value,
             ),

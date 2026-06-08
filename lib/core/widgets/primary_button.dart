@@ -1,39 +1,48 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:gajacash_sample/core/theme.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
-  final Color backgroundColor;
-  final Color textColor;
+  final Color? backgroundColor;
+  final Color? textColor;
 
   const PrimaryButton({
     super.key,
     required this.text,
     this.onPressed,
-    this.backgroundColor = const Color(0xFFFFCC66),
-    this.textColor = const Color(0xFF1F1D1B),
+    this.backgroundColor,
+    this.textColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    bool isEnabled = onPressed != null;
+    final bool isEnabled = onPressed != null;
+    final theme = context.theme;
+
+    // Resolve color settings from theme parameters
+    final Color bgColor = backgroundColor ?? theme.colorScheme.secondary;
+    final Color labelColor = textColor ?? theme.colorScheme.onSecondary;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: isEnabled ? backgroundColor : const Color(0xFFD9D9D9),
+        color: isEnabled ? bgColor : const Color(0xFFD9D9D9),
         borderRadius: BorderRadius.circular(32),
-        boxShadow: isEnabled ? [
-          const BoxShadow(
-            color: Color(0x4DDBA326), // 0.3 opacity of #DBA326
-            offset: Offset(6, 6),
-            blurRadius: 12,
-          ),
-          const BoxShadow(
-            color: Colors.white,
-            offset: Offset(-6, -6),
-            blurRadius: 12,
-          ),
-        ] : null,
+        boxShadow: isEnabled
+            ? [
+                BoxShadow(
+                  color: const Color(0xFFDBA326).withValues(alpha: 0.3), // 0.3 opacity of #DBA326
+                  offset: const Offset(6, 6),
+                  blurRadius: 12,
+                ),
+                const BoxShadow(
+                  color: Colors.white,
+                  offset: Offset(-6, -6),
+                  blurRadius: 12,
+                ),
+              ]
+            : null,
       ),
       child: Material(
         color: Colors.transparent,
@@ -47,7 +56,7 @@ class PrimaryButton extends StatelessWidget {
               text,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: isEnabled ? textColor : textColor.withValues(alpha: 0.4),
+                color: isEnabled ? labelColor : labelColor.withValues(alpha: 0.4),
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 letterSpacing: -0.5,
