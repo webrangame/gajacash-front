@@ -38,7 +38,7 @@ class PrimaryButton extends StatelessWidget {
         border: isEnabled
             ? Border.all(color: Colors.white.withValues(alpha: 0.4), width: 1.0)
             : null,
-        color: isEnabled ? null : const Color(0xFFD9D9D9),
+        color: isEnabled ? null : (backgroundColor ?? const Color(0xFFD9D9D9)),
         gradient: isEnabled
             ? LinearGradient(
                 begin: Alignment.topCenter,
@@ -75,7 +75,7 @@ class PrimaryButton extends StatelessWidget {
               style: TextStyle(
                 color: isEnabled
                     ? labelColor
-                    : labelColor.withValues(alpha: 0.4),
+                    : (textColor?.withValues(alpha: 0.4) ?? labelColor.withValues(alpha: 0.4)),
                 fontSize: 20,
                 fontWeight: FontWeight
                     .w500, //Semi-bold for a premium, readable look matching the image

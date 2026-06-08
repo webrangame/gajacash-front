@@ -6,12 +6,16 @@ class SpeechBubble extends StatefulWidget {
   final String? text;
   final List<String>? texts;
   final Duration interval;
+  final EdgeInsetsGeometry? padding;
+  final double? fontSize;
 
   const SpeechBubble({
     super.key,
     this.text,
     this.texts,
     this.interval = const Duration(seconds: 5),
+    this.padding,
+    this.fontSize,
   }) : assert(text != null || texts != null, 'Either text or texts must be provided');
 
   @override
@@ -74,10 +78,11 @@ class _SpeechBubbleState extends State<SpeechBubble> {
     final String displayText = _messages.isNotEmpty ? _messages[_currentIndex] : '';
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding: widget.padding ?? const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.circular(24),
@@ -103,8 +108,8 @@ class _SpeechBubbleState extends State<SpeechBubble> {
               displayText,
               key: ValueKey<String>(displayText),
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: widget.fontSize ?? 18,
                 fontWeight: FontWeight.w500,
                 color: AppColors.primaryGreen,
                 height: 1.3,

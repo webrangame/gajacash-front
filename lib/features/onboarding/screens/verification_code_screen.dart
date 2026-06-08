@@ -1,4 +1,3 @@
-﻿import 'package:gajacash_sample/core/widgets/safe_network_image.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/api_service.dart';
@@ -6,7 +5,9 @@ import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/features/onboarding/screens/password_entry_screen.dart';
 import 'package:gajacash_sample/features/onboarding/screens/information_entry1_screen.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
+import 'package:gajacash_sample/core/widgets/speech_bubble.dart';
+import 'package:gajacash_sample/core/widgets/inset_neumorphic_container.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
   final String phoneNumber;
@@ -17,8 +18,12 @@ class VerificationCodeScreen extends StatefulWidget {
 }
 
 class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
-  final List<TextEditingController> _controllers = List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> _controllers = List.generate(
+    6,
+    (_) => TextEditingController(),
+  );
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
+  final List<bool> _isFocusedList = List.generate(6, (_) => false);
   int _secondsLeft = 60;
   Timer? _timer;
   bool _canResend = false;
@@ -27,6 +32,15 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   void initState() {
     super.initState();
     _startTimer();
+    for (int i = 0; i < 6; i++) {
+      _focusNodes[i].addListener(() {
+        if (mounted) {
+          setState(() {
+            _isFocusedList[i] = _focusNodes[i].hasFocus;
+          });
+        }
+      });
+    }
   }
 
   void _startTimer() {
@@ -59,125 +73,189 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            
-            // Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  _buildIconButton(LucideIcons.arrowLeft, () => Navigator.of(context).pop()),
-                ],
-              ),
-            ),
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final bool isSmallScreen = screenHeight < 720;
+    final bool isExtraSmallScreen = screenHeight < 600;
+    final bool isExtraNarrow = screenWidth < 350;
 
-            Expanded(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Container(
-                    constraints: const BoxConstraints(maxWidth: 500),
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+    return Scaffold(
+      backgroundColor: AppColors.phoneFrameBg,
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                children: [
+                  // Header
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: isExtraSmallScreen ? 4 : 8,
+                    ),
+                    child: Row(
+                      children: [
+                        CustomBackButton(
+                          onTap: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Mascot bubble takes remaining space
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: _buildMascotSection(isSmallScreen, isExtraSmallScreen),
+                    ),
+                  ),
+
+                  SizedBox(height: isExtraSmallScreen ? 6 : (isSmallScreen ? 8 : 16)),
+
+                  // Bottom Section: Inputs & Buttons
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: isExtraSmallScreen ? 10 : 0,
+                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Mascot and Bubble
-                        _buildMascotSection(),
+                        _buildFormSection(isSmallScreen, isExtraNarrow),
+                        SizedBox(height: isExtraSmallScreen ? 8 : (isSmallScreen ? 12 : 20)),
 
-                        const SizedBox(height: 16),
+                        // Countdown Timer Section (only visible while ticking)
+                        AnimatedOpacity(
+                          duration: const Duration(milliseconds: 300),
+                          opacity: _canResend ? 0.0 : 1.0,
+                          child: IgnorePointer(
+                            ignoring: _canResend,
+                            child: _buildTimerSection(),
+                          ),
+                        ),
 
-                        // Form Section
-                        _buildFormSection(),
+                        SizedBox(height: isExtraSmallScreen ? 8 : (isSmallScreen ? 12 : 20)),
 
-                        const SizedBox(height: 24),
-
-                        // Countdown / Resend
-                        _buildTimerSection(),
-
-                        const SizedBox(height: 24),
-
-                        // Continue Button
-                        if (!_canResend)
-                          PrimaryButton(
-                            text: "Continue",
-                            onPressed: () async {
-                              String otp = _controllers.map((c) => c.text.trim()).join();
-                              if (otp.length < 6) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text("Please enter the complete 6-digit code")),
-                                );
-                                return;
-                              }
-
-                              final navigator = Navigator.of(context);
-                              final messenger = ScaffoldMessenger.of(context);
-
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (context) => const Center(child: CircularProgressIndicator(color: AppColors.primaryGreen)),
+                        // Continue Button (Always visible)
+                        PrimaryButton(
+                          text: "Continue",
+                          onPressed: () async {
+                            String otp = _controllers
+                                .map((c) => c.text.trim())
+                                .join();
+                            if (otp.length < 6) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Please enter the complete 6-digit code",
+                                  ),
+                                ),
                               );
+                              return;
+                            }
 
-                              try {
-                                final response = await ApiService().verifyOtp(widget.phoneNumber, otp);
-                                if (mounted) {
-                                  if (response.statusCode == 200) {
-                                    try {
-                                      final checkResp = await ApiService().checkUser(widget.phoneNumber);
-                                      bool userExists = checkResp.data['exists'] ?? false;
-                                      if (mounted) {
-                                        navigator.pop(); // Pop loader
-                                        if (userExists) {
-                                          navigator.push(
-                                            MaterialPageRoute(
-                                              builder: (context) => PasswordEntryScreen(phoneNumber: widget.phoneNumber),
-                                            ),
-                                          );
-                                        } else {
-                                          navigator.push(
-                                            MaterialPageRoute(
-                                              builder: (context) => InformationEntry1Screen(phoneNumber: widget.phoneNumber),
-                                            ),
-                                          );
-                                        }
-                                      }
-                                    } catch (checkErr) {
-                                      if (mounted) {
-                                        navigator.pop(); // Pop loader
+                            final navigator = Navigator.of(context);
+                            final messenger = ScaffoldMessenger.of(context);
+
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.primaryGreen,
+                                ),
+                              ),
+                            );
+
+                            try {
+                              final response = await ApiService().verifyOtp(
+                                widget.phoneNumber,
+                                otp,
+                              );
+                              if (mounted) {
+                                if (response.statusCode == 200) {
+                                  try {
+                                    final checkResp = await ApiService()
+                                        .checkUser(widget.phoneNumber);
+                                    bool userExists =
+                                        checkResp.data['exists'] ?? false;
+                                    if (mounted) {
+                                      navigator.pop(); // Pop loader
+                                      if (userExists) {
                                         navigator.push(
                                           MaterialPageRoute(
-                                            builder: (context) => InformationEntry1Screen(phoneNumber: widget.phoneNumber),
+                                            builder: (context) =>
+                                                PasswordEntryScreen(
+                                                  phoneNumber:
+                                                      widget.phoneNumber,
+                                                ),
+                                          ),
+                                        );
+                                      } else {
+                                        navigator.push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                InformationEntry1Screen(
+                                                  phoneNumber:
+                                                      widget.phoneNumber,
+                                                ),
                                           ),
                                         );
                                       }
                                     }
-                                  } else {
-                                    navigator.pop(); // Pop loader
-                                    messenger.showSnackBar(
-                                      const SnackBar(content: Text("Invalid verification code. Please try again.")),
-                                    );
+                                  } catch (checkErr) {
+                                    if (mounted) {
+                                      navigator.pop(); // Pop loader
+                                      navigator.push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              InformationEntry1Screen(
+                                                phoneNumber:
+                                                    widget.phoneNumber,
+                                              ),
+                                        ),
+                                      );
+                                    }
                                   }
-                                }
-                              } catch (e) {
-                                if (mounted) {
+                                } else {
                                   navigator.pop(); // Pop loader
                                   messenger.showSnackBar(
-                                    SnackBar(content: Text("Verification failed: ${e.toString()}")),
+                                    const SnackBar(
+                                      content: Text(
+                                        "Invalid verification code. Please try again.",
+                                      ),
+                                    ),
                                   );
                                 }
                               }
-                            },
-                          )
-                        else
-                          _buildResendButton(),
-                        
-                        const SizedBox(height: 32),
+                            } catch (e) {
+                              if (mounted) {
+                                navigator.pop(); // Pop loader
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Verification failed: ${e.toString()}",
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        // Re-send OTP Button (Always visible, disabled until timer expires)
+                        _buildResendButton(),
+
+                        SizedBox(height: isExtraSmallScreen ? 10 : (isSmallScreen ? 16 : 24)),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ],
@@ -186,137 +264,119 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
     );
   }
 
-
-
-  Widget _buildIconButton(IconData icon, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: AppColors.phoneFrameBg,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.clayShadowColor.withValues(alpha: 0.8),
-              offset: const Offset(6, 6),
-              blurRadius: 12,
-            ),
-            const BoxShadow(
-              color: Colors.white,
-              offset: Offset(-6, -6),
-              blurRadius: 12,
-            ),
-          ],
-        ),
-        child: Icon(icon, color: AppColors.primaryGreen, size: 28),
-      ),
-    );
-  }
-
-  Widget _buildMascotSection() {
+  Widget _buildMascotSection(bool isSmallScreen, bool isExtraSmallScreen) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Speech Bubble
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          decoration: BoxDecoration(
-            color: AppColors.background,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: const [
-              BoxShadow(
-                color: AppColors.clayShadowColor,
-                offset: Offset(8, 8),
-                blurRadius: 16,
+        SpeechBubble(
+          text: "Please enter the 6-digit OTP sent to ${widget.phoneNumber}",
+          padding: isExtraSmallScreen ? const EdgeInsets.all(12) : null,
+          fontSize: isExtraSmallScreen ? 15 : null,
+        ),
+        SizedBox(height: isExtraSmallScreen ? 6 : (isSmallScreen ? 8 : 12)),
+        Expanded(
+          child: Transform.translate(
+            offset: const Offset(0, -4),
+            child: Transform.scale(
+              scale: isExtraSmallScreen ? 0.75 : 0.85,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: isExtraSmallScreen ? 80 : (isSmallScreen ? 130 : 180),
+                ),
+                child: Image.asset(
+                  'assets/images/mascot_verify.png',
+                  fit: BoxFit.contain,
+                ),
               ),
-              BoxShadow(
-                color: Colors.white,
-                offset: Offset(-8, -8),
-                blurRadius: 16,
-              ),
-            ],
-          ),
-          child: Text(
-            "Please enter the 6-digit OTP sent to ${widget.phoneNumber}",
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppColors.primaryGreen,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              height: 1.3,
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-        // Mascot
-        SafeNetworkImage(url:
-          'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4180c46d-36ad-4905-8d2c-8f3365a4ea7d_3840w.png?w=800&q=80',
-          width: 180,
-          fit: BoxFit.contain,
         ),
       ],
     );
   }
 
-  Widget _buildFormSection() {
+  Widget _buildFormSection(bool isSmallScreen, bool isExtraNarrow) {
+    final double boxSpacing = isExtraNarrow ? 4 : (isSmallScreen ? 6 : 8);
+    final double separatorWidth = isExtraNarrow ? 6 : (isSmallScreen ? 8 : 12);
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
+        Text(
           "Please enter the code we just sent you.",
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+            fontSize: isSmallScreen ? 18 : 20,
+            fontWeight: FontWeight.w500,
             color: AppColors.primaryText,
+            letterSpacing: -0.5,
           ),
+          textAlign: TextAlign.left,
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: isSmallScreen ? 16 : 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ...List.generate(3, (index) => _buildOtpBox(index)),
-            Container(width: 12, height: 2, decoration: BoxDecoration(color: AppColors.primaryGreen.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(2))),
-            ...List.generate(3, (index) => _buildOtpBox(index + 3)),
+            Row(
+              children: [
+                _buildOtpBox(0, isSmallScreen, isExtraNarrow),
+                SizedBox(width: boxSpacing),
+                _buildOtpBox(1, isSmallScreen, isExtraNarrow),
+                SizedBox(width: boxSpacing),
+                _buildOtpBox(2, isSmallScreen, isExtraNarrow),
+              ],
+            ),
+            Container(
+              width: separatorWidth,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.primaryGreen.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            Row(
+              children: [
+                _buildOtpBox(3, isSmallScreen, isExtraNarrow),
+                SizedBox(width: boxSpacing),
+                _buildOtpBox(4, isSmallScreen, isExtraNarrow),
+                SizedBox(width: boxSpacing),
+                _buildOtpBox(5, isSmallScreen, isExtraNarrow),
+              ],
+            ),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildOtpBox(int index) {
-    return Container(
-      width: 44,
-      height: 56,
-      decoration: BoxDecoration(
-        color: AppColors.phoneFrameBg,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.clayShadowColor,
-            offset: Offset(4, 4),
-            blurRadius: 8,
-          ),
-          BoxShadow(
-            color: Colors.white,
-            offset: Offset(-4, -4),
-            blurRadius: 8,
-          ),
-        ],
-      ),
+  Widget _buildOtpBox(int index, bool isSmallScreen, bool isExtraNarrow) {
+    final double boxWidth = isExtraNarrow ? 38 : (isSmallScreen ? 44 : 52);
+    final double boxHeight = isExtraNarrow ? 48 : (isSmallScreen ? 56 : 64);
+    final double fontSize = isExtraNarrow ? 20 : 24;
+
+    return InsetNeumorphicContainer(
+      width: boxWidth,
+      height: boxHeight,
+      borderRadius: 12,
+      isFocused: _isFocusedList[index],
       child: TextField(
         controller: _controllers[index],
         focusNode: _focusNodes[index],
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
+        textAlignVertical: TextAlignVertical.center,
         maxLength: 1,
-        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: AppColors.primaryText,
+        ),
         obscureText: true,
         obscuringCharacter: '●',
+        cursorColor: AppColors.primaryGreen,
         decoration: const InputDecoration(
           counterText: "",
           border: InputBorder.none,
+          contentPadding: EdgeInsets.zero,
         ),
         onChanged: (value) {
           if (value.isNotEmpty && index < 5) {
@@ -330,11 +390,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   }
 
   Widget _buildTimerSection() {
-    return Visibility(
-      visible: !_canResend,
-      maintainSize: true,
-      maintainAnimation: true,
-      maintainState: true,
+    return Center(
       child: Text(
         "Didn't Receive OTP? Resend in $_secondsLeft seconds",
         style: TextStyle(
@@ -347,62 +403,51 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   }
 
   Widget _buildResendButton() {
-    return GestureDetector(
-      onTap: () async {
-        final navigator = Navigator.of(context);
-        final messenger = ScaffoldMessenger.of(context);
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => const Center(child: CircularProgressIndicator(color: AppColors.primaryGreen)),
-        );
-        try {
-          await ApiService().sendOtp(widget.phoneNumber);
-          if (mounted) {
-            navigator.pop(); // Pop loader
-            messenger.showSnackBar(
-              const SnackBar(content: Text("OTP resent successfully!"), backgroundColor: AppColors.primaryGreen),
-            );
-            _startTimer();
-          }
-        } catch (e) {
-          if (mounted) {
-            navigator.pop(); // Pop loader
-            messenger.showSnackBar(
-              SnackBar(content: Text("Failed to resend OTP: ${e.toString()}")),
-            );
-          }
-        }
-      },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        decoration: BoxDecoration(
-          color: const Color(0xFFD9D9D9),
-          borderRadius: BorderRadius.circular(32),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(4, 4),
-              blurRadius: 10,
-            ),
-            BoxShadow(
-              color: Colors.white,
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-            ),
-          ],
-        ),
-        child: const Text(
-          "Re-send OTP",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppColors.primaryText,
-          ),
-        ),
-      ),
+    return PrimaryButton(
+      text: "Re-send OTP",
+      backgroundColor: _canResend
+          ? const Color(0xFFD9D9D9)
+          : const Color(0xFFE5E5E5),
+      textColor: _canResend
+          ? AppColors.primaryText
+          : AppColors.primaryText.withValues(alpha: 0.35),
+      onPressed: _canResend
+          ? () async {
+              final navigator = Navigator.of(context);
+              final messenger = ScaffoldMessenger.of(context);
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primaryGreen,
+                  ),
+                ),
+              );
+              try {
+                await ApiService().sendOtp(widget.phoneNumber);
+                if (mounted) {
+                  navigator.pop(); // Pop loader
+                  messenger.showSnackBar(
+                    const SnackBar(
+                      content: Text("OTP resent successfully!"),
+                      backgroundColor: AppColors.primaryGreen,
+                    ),
+                  );
+                  _startTimer();
+                }
+              } catch (e) {
+                if (mounted) {
+                  navigator.pop(); // Pop loader
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text("Failed to resend OTP: ${e.toString()}"),
+                    ),
+                  );
+                }
+              }
+            }
+          : null,
     );
   }
 }

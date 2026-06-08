@@ -3,9 +3,27 @@ import 'package:get/get.dart';
 import 'package:gajacash_sample/core/api_service.dart';
 import 'package:gajacash_sample/features/onboarding/screens/verification_code_screen.dart';
 
+class Country {
+  final String name;
+  final String code;
+  final String flagAsset;
+
+  const Country({
+    required this.name,
+    required this.code,
+    required this.flagAsset,
+  });
+}
+
 class PhoneEntryController extends GetxController {
   final phoneController = TextEditingController();
   final isConfirmationVisible = false.obs;
+
+  final selectedCountry = const Country(
+    name: 'Sri Lanka',
+    code: '+94',
+    flagAsset: 'assets/images/flag_lk.png',
+  ).obs;
 
   @override
   void onClose() {
@@ -26,8 +44,10 @@ class PhoneEntryController extends GetxController {
     if (cleanPhone.startsWith('0')) {
       cleanPhone = cleanPhone.substring(1);
     }
-    if (!cleanPhone.startsWith('94')) {
-      cleanPhone = '94$cleanPhone';
+    
+    final countryPrefix = selectedCountry.value.code.replaceAll('+', '');
+    if (!cleanPhone.startsWith(countryPrefix)) {
+      cleanPhone = '$countryPrefix$cleanPhone';
     }
     final phone = cleanPhone;
 

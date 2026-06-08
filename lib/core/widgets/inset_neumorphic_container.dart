@@ -7,6 +7,7 @@ class InsetNeumorphicContainer extends StatelessWidget {
   final double borderRadius;
   final Color color;
   final bool isFocused;
+  final Color? borderColor;
 
   const InsetNeumorphicContainer({
     super.key,
@@ -16,6 +17,7 @@ class InsetNeumorphicContainer extends StatelessWidget {
     this.borderRadius = 20,
     this.color = const Color(0xFFE8F4ED),
     this.isFocused = false,
+    this.borderColor,
   });
 
   @override
@@ -27,8 +29,8 @@ class InsetNeumorphicContainer extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
-          color: isFocused ? const Color(0xFF006633).withValues(alpha: 0.25) : Colors.transparent,
-          width: 1.2,
+          color: borderColor ?? (isFocused ? const Color(0xFF006633).withValues(alpha: 0.25) : Colors.transparent),
+          width: borderColor != null ? 1.8 : 1.2,
         ),
       ),
       child: Stack(

@@ -1,9 +1,11 @@
-﻿import 'package:gajacash_sample/core/widgets/safe_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gajacash_sample/core/api_service.dart';
 import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/features/onboarding/screens/home_screen.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
+import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
+import 'package:gajacash_sample/core/widgets/speech_bubble.dart';
+import 'package:gajacash_sample/core/widgets/inset_neumorphic_container.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class PasswordEntryScreen extends StatefulWidget {
@@ -21,6 +23,7 @@ class _PasswordEntryScreenState extends State<PasswordEntryScreen>
   final FocusNode _pinFocusNode = FocusNode();
   bool _pinVisible = false;
   bool _showError = false;
+  bool _isFocused = false;
 
   late AnimationController _shakeController;
 
@@ -31,6 +34,13 @@ class _PasswordEntryScreenState extends State<PasswordEntryScreen>
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
+    _pinFocusNode.addListener(() {
+      if (mounted) {
+        setState(() {
+          _isFocused = _pinFocusNode.hasFocus;
+        });
+      }
+    });
   }
 
   @override
@@ -85,7 +95,9 @@ class _PasswordEntryScreenState extends State<PasswordEntryScreen>
           _shakeController.forward(from: 0);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(response.data['error'] ?? 'Incorrect PIN. Please try again.'),
+              content: Text(
+                response.data['error'] ?? 'Incorrect PIN. Please try again.',
+              ),
             ),
           );
         }
@@ -105,166 +117,163 @@ class _PasswordEntryScreenState extends State<PasswordEntryScreen>
   @override
   Widget build(BuildContext context) {
     final bool isReady = _pinController.text.length == 4;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final bool isSmallScreen = screenHeight < 720;
+    final bool isExtraSmallScreen = screenHeight < 600;
+    final bool isExtraNarrow = screenWidth < 350;
 
     return Scaffold(
+      backgroundColor: AppColors.phoneFrameBg,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
                 children: [
-                  _buildIconButton(
-                    LucideIcons.arrowLeft,
-                    () => Navigator.of(context).pop(),
+                  // Header
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: isExtraSmallScreen ? 4 : 8,
+                    ),
+                    child: Row(
+                      children: [
+                        CustomBackButton(
+                          onTap: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
 
-            Expanded(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Container(
-                    constraints: const BoxConstraints(maxWidth: 500),
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                  // Mascot bubble takes remaining space
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: _buildMascotSection(isSmallScreen, isExtraSmallScreen),
+                    ),
+                  ),
+
+                  SizedBox(height: isExtraSmallScreen ? 6 : (isSmallScreen ? 8 : 16)),
+
+                  // Bottom Section: Inputs & Buttons
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: isExtraSmallScreen ? 6 : (isSmallScreen ? 10 : 0),
+                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Mascot & Bubble
-                        _buildMascotSection(),
-
-                        const SizedBox(height: 32),
-
                         // Title
-                        const Text(
+                        Text(
                           "Enter your 4-digit PIN",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: isExtraSmallScreen ? 20 : 24,
                             fontWeight: FontWeight.bold,
                             color: AppColors.primaryText,
                             height: 1.2,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: isExtraSmallScreen ? 2 : 4),
                         Text(
                           "The PIN you created when you registered",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: isExtraSmallScreen ? 12 : 14,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.primaryGreen.withValues(alpha: 0.6),
+                            color: AppColors.primaryGreen.withValues(
+                              alpha: 0.6,
+                            ),
                           ),
                         ),
 
-                        const SizedBox(height: 32),
+                        SizedBox(height: isExtraSmallScreen ? 8 : (isSmallScreen ? 16 : 32)),
 
                         // PIN Card
-                        _buildPinCard(),
+                        _buildPinCard(isSmallScreen, isExtraSmallScreen, isExtraNarrow),
 
-                        const SizedBox(height: 48),
+                        SizedBox(height: isExtraSmallScreen ? 12 : (isSmallScreen ? 24 : 48)),
 
                         PrimaryButton(
                           text: "Login",
                           onPressed: isReady ? _doLogin : null,
                         ),
 
-                        const SizedBox(height: 32),
+                        SizedBox(height: isExtraSmallScreen ? 8 : (isSmallScreen ? 16 : 32)),
                       ],
                     ),
                   ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMascotSection(bool isSmallScreen, bool isExtraSmallScreen) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Speech Bubble
+        SpeechBubble(
+          text: "Welcome back! 👋\nEnter your PIN to continue.",
+          padding: isExtraSmallScreen ? const EdgeInsets.all(12) : null,
+          fontSize: isExtraSmallScreen ? 15 : null,
+        ),
+        SizedBox(height: isExtraSmallScreen ? 6 : (isSmallScreen ? 8 : 12)),
+        // Mascot
+        Expanded(
+          child: Transform.translate(
+            offset: const Offset(0, -4),
+            child: Transform.scale(
+              scale: isExtraSmallScreen ? 0.75 : 0.85,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: isExtraSmallScreen ? 80 : (isSmallScreen ? 130 : 180),
+                ),
+                child: Image.asset(
+                  'assets/images/mascot.png',
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildIconButton(IconData icon, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: AppColors.phoneFrameBg,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.clayShadowColor.withValues(alpha: 0.8),
-              offset: const Offset(6, 6),
-              blurRadius: 12,
-            ),
-            const BoxShadow(
-              color: Colors.white,
-              offset: Offset(-6, -6),
-              blurRadius: 12,
-            ),
-          ],
-        ),
-        child: Icon(icon, color: AppColors.primaryGreen, size: 28),
-      ),
-    );
-  }
-
-  Widget _buildMascotSection() {
-    return Column(
-      children: [
-        // Speech Bubble
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: AppColors.background,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: const [
-              BoxShadow(
-                color: AppColors.clayShadowColor,
-                offset: Offset(8, 8),
-                blurRadius: 16,
-              ),
-              BoxShadow(
-                color: Colors.white,
-                offset: Offset(-8, -8),
-                blurRadius: 16,
-              ),
-            ],
           ),
-          child: const Text(
-            "Welcome back! 👋\nEnter your PIN to continue.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppColors.primaryGreen,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              height: 1.3,
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        // Mascot
-        SafeNetworkImage(
-          url: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4180c46d-36ad-4905-8d2c-8f3365a4ea7d_800w.png',
-          width: 180,
-          fit: BoxFit.contain,
         ),
       ],
     );
   }
 
-  Widget _buildPinCard() {
+  Widget _buildPinCard(bool isSmallScreen, bool isExtraSmallScreen, bool isExtraNarrow) {
+    final double cardPadding = isExtraSmallScreen ? 16 : 24;
+    final double elementHeight = isExtraSmallScreen ? 52 : 64;
+    final double fontSize = isExtraSmallScreen ? 20 : 24;
+    final double dotSize = isExtraSmallScreen ? 12 : 16;
+    final double dotSpacing = isExtraSmallScreen ? 6 : 8;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(cardPadding),
       decoration: BoxDecoration(
         color: const Color(0xFFF5FAF7),
         borderRadius: BorderRadius.circular(32),
         boxShadow: const [
-          BoxShadow(color: AppColors.clayShadowColor, offset: Offset(8, 8), blurRadius: 16),
-          BoxShadow(color: Colors.white, offset: Offset(-8, -8), blurRadius: 16),
+          BoxShadow(
+            color: AppColors.clayShadowColor,
+            offset: Offset(8, 8),
+            blurRadius: 16,
+          ),
+          BoxShadow(
+            color: Colors.white,
+            offset: Offset(-8, -8),
+            blurRadius: 16,
+          ),
         ],
       ),
       child: Column(
@@ -290,37 +299,19 @@ class _PasswordEntryScreenState extends State<PasswordEntryScreen>
                   builder: (context, child) {
                     final offset = _showError
                         ? (8 *
-                            (0.5 - (0.5 - _shakeController.value).abs()) *
-                            ((_shakeController.value * 10).floor() % 2 == 0
-                                ? 1
-                                : -1))
+                              (0.5 - (0.5 - _shakeController.value).abs()) *
+                              ((_shakeController.value * 10).floor() % 2 == 0
+                                  ? 1
+                                  : -1))
                         : 0.0;
                     return Transform.translate(
                       offset: Offset(offset, 0),
-                      child: Container(
-                        height: 64,
-                        decoration: BoxDecoration(
-                          color: AppColors.phoneFrameBg,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: AppColors.clayShadowColor,
-                              offset: Offset(4, 4),
-                              blurRadius: 8,
-                            ),
-                            BoxShadow(
-                              color: Colors.white,
-                              offset: Offset(-4, -4),
-                              blurRadius: 8,
-                            ),
-                          ],
-                          border: _showError
-                              ? Border.all(
-                                  color: Colors.red.withValues(alpha: 0.5),
-                                  width: 2,
-                                )
-                              : null,
-                        ),
+                      child: InsetNeumorphicContainer(
+                        height: elementHeight,
+                        borderRadius: 16,
+                        isFocused: _isFocused,
+                        color: AppColors.phoneFrameBg,
+                        borderColor: _showError ? Colors.red.withValues(alpha: 0.5) : null,
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -346,12 +337,13 @@ class _PasswordEntryScreenState extends State<PasswordEntryScreen>
                                       _pinController.text.length > index;
                                   if (_pinVisible && isFilled) {
                                     return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: dotSpacing,
+                                      ),
                                       child: Text(
                                         _pinController.text[index],
-                                        style: const TextStyle(
-                                          fontSize: 24,
+                                        style: TextStyle(
+                                          fontSize: fontSize,
                                           fontWeight: FontWeight.bold,
                                           color: AppColors.primaryGreen,
                                         ),
@@ -359,18 +351,20 @@ class _PasswordEntryScreenState extends State<PasswordEntryScreen>
                                     );
                                   }
                                   return Container(
-                                    width: 16,
-                                    height: 16,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 8),
+                                    width: dotSize,
+                                    height: dotSize,
+                                    margin: EdgeInsets.symmetric(
+                                      horizontal: dotSpacing,
+                                    ),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: isFilled
                                           ? (_showError
-                                              ? Colors.red
-                                              : AppColors.primaryGreen)
-                                          : AppColors.primaryGreen
-                                              .withValues(alpha: 0.1),
+                                                ? Colors.red
+                                                : AppColors.primaryGreen)
+                                          : AppColors.primaryGreen.withValues(
+                                              alpha: 0.1,
+                                            ),
                                     ),
                                   );
                                 }),
@@ -388,20 +382,22 @@ class _PasswordEntryScreenState extends State<PasswordEntryScreen>
               GestureDetector(
                 onTap: () => setState(() => _pinVisible = !_pinVisible),
                 child: Container(
-                  width: 64,
-                  height: 64,
+                  width: elementHeight,
+                  height: elementHeight,
                   decoration: BoxDecoration(
                     color: AppColors.phoneFrameBg,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: const [
                       BoxShadow(
-                          color: AppColors.clayShadowColor,
-                          offset: Offset(4, 4),
-                          blurRadius: 8),
+                        color: AppColors.clayShadowColor,
+                        offset: Offset(4, 4),
+                        blurRadius: 8,
+                      ),
                       BoxShadow(
-                          color: Colors.white,
-                          offset: Offset(-4, -4),
-                          blurRadius: 8),
+                        color: Colors.white,
+                        offset: Offset(-4, -4),
+                        blurRadius: 8,
+                      ),
                     ],
                   ),
                   child: Icon(
@@ -414,17 +410,17 @@ class _PasswordEntryScreenState extends State<PasswordEntryScreen>
             ],
           ),
           if (_showError)
-            const Padding(
-              padding: EdgeInsets.only(top: 8, left: 8),
+            Padding(
+              padding: const EdgeInsets.only(top: 8, left: 8),
               child: Row(
                 children: [
-                  Icon(LucideIcons.alertCircle, color: Colors.red, size: 14),
-                  SizedBox(width: 8),
+                  const Icon(LucideIcons.alertCircle, color: Colors.red, size: 14),
+                  const SizedBox(width: 8),
                   Text(
                     "Incorrect PIN. Please try again.",
                     style: TextStyle(
                       color: Colors.red,
-                      fontSize: 12,
+                      fontSize: isExtraSmallScreen ? 11 : 12,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

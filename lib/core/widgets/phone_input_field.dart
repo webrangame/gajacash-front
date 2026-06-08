@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gajacash_sample/core/theme.dart';
+import 'package:gajacash_sample/core/widgets/inset_neumorphic_container.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class PhoneInputField extends StatefulWidget {
@@ -26,15 +28,42 @@ class PhoneInputField extends StatefulWidget {
 
 class _PhoneInputFieldState extends State<PhoneInputField> {
   late FocusNode _focusNode;
+  bool _isFocused = false;
 
   @override
   void initState() {
     super.initState();
     _focusNode = widget.focusNode ?? FocusNode();
+    _focusNode.addListener(_onFocusChange);
+    _isFocused = _focusNode.hasFocus;
+  }
+
+  @override
+  void didUpdateWidget(covariant PhoneInputField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.focusNode != oldWidget.focusNode) {
+      oldWidget.focusNode?.removeListener(_onFocusChange);
+      _focusNode.removeListener(_onFocusChange);
+      if (oldWidget.focusNode == null) {
+        _focusNode.dispose();
+      }
+      _focusNode = widget.focusNode ?? FocusNode();
+      _focusNode.addListener(_onFocusChange);
+      _isFocused = _focusNode.hasFocus;
+    }
+  }
+
+  void _onFocusChange() {
+    if (mounted) {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+    }
   }
 
   @override
   void dispose() {
+    _focusNode.removeListener(_onFocusChange);
     if (widget.focusNode == null) {
       _focusNode.dispose();
     }
@@ -43,46 +72,13 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFFE0E0E0), Colors.white],
-        ),
-      ),
-      child: Container(
-        height: 64,
+    return InsetNeumorphicContainer(
+      borderRadius: 24,
+      isFocused: _isFocused,
+      height: 64,
+      color: AppColors.phoneFrameBg,
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 248, 250, 249),
-          borderRadius: BorderRadius.circular(24),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: Colors.black.withValues(alpha: 0.05),
-          //     blurRadius: 4,
-          //     offset: const Offset(-2, -2),
-          //   ),
-          // ],
-          // border: Border.all(
-          //   color: _isFocused
-          //       ? const Color(0xFF006633).withValues(alpha: 0.2)
-          //       : Colors.transparent,
-          //   width: 1.0,
-          // ),
-          // gradient: const LinearGradient(
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          //   colors: [
-          //     Color(0xFFC5D1CB), // Simulated inset shadow (top-left) - #c5d1cb
-          //     Color(0xFFE8F4ED), // Main background - #E8F4ED
-          //     Color(0xFFFFFFFF), // Simulated inset reflection (bottom-right) - #ffffff
-          //   ],
-          //   stops: [0.0, 0.15, 1.0],
-          // ),
-        ),
         child: Row(
           children: [
             // Country Code Selector Button
@@ -90,7 +86,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
               color: Colors.transparent,
               child: InkWell(
                 onTap: widget.onCountryCodeTap,
-                hoverColor: const Color(0xFF006633).withValues(alpha: 0.05),
+                hoverColor: AppColors.primaryGreen.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
                   height: 40,
@@ -98,7 +94,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                   decoration: BoxDecoration(
                     border: Border(
                       right: BorderSide(
-                        color: const Color(0xFF006633).withValues(alpha: 0.1),
+                        color: AppColors.primaryGreen.withValues(alpha: 0.1),
                         width: 1.0,
                       ),
                     ),
@@ -119,12 +115,26 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(2),
-                          child: Image.asset(
-                            widget.flagAssetPath,
-                            width: 24,
-                            height: 16,
-                            fit: BoxFit.cover,
-                          ),
+                          child: widget.flagAssetPath.startsWith('http')
+                              ? Image.network(
+                                  widget.flagAssetPath,
+                                  width: 24,
+                                  height: 16,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) => Container(
+                                    color: Colors.grey[300],
+                                    width: 24,
+                                    height: 16,
+                                    alignment: Alignment.center,
+                                    child: const Icon(Icons.flag, size: 12),
+                                  ),
+                                )
+                              : Image.asset(
+                                  widget.flagAssetPath,
+                                  width: 24,
+                                  height: 16,
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -133,14 +143,14 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1F1D1B),
+                          color: AppColors.primaryText,
                         ),
                       ),
                       const SizedBox(width: 4),
                       Icon(
                         LucideIcons.chevronDown,
                         size: 16,
-                        color: const Color(0xFF006633).withValues(alpha: 0.60),
+                        color: AppColors.primaryGreen.withValues(alpha: 0.60),
                       ),
                     ],
                   ),
@@ -156,7 +166,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1F1D1B),
+                  color: AppColors.primaryText,
                   fontFamily: 'monospace',
                   letterSpacing: 0.5,
                 ),
@@ -164,7 +174,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                 decoration: InputDecoration(
                   hintText: widget.hintText,
                   hintStyle: TextStyle(
-                    color: const Color(0xFF006633).withValues(alpha: 0.3),
+                    color: AppColors.primaryGreen.withValues(alpha: 0.3),
                     fontFamily: 'monospace',
                   ),
                   border: InputBorder.none,

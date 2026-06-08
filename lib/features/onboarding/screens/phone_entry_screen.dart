@@ -1,11 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gajacash_sample/core/theme.dart';
 import 'package:gajacash_sample/features/onboarding/phone_entry_controller.dart';
 import 'package:gajacash_sample/core/widgets/primary_button.dart';
 import 'package:gajacash_sample/core/widgets/custom_back_button.dart';
-import 'package:gajacash_sample/core/widgets/mascot_bubble.dart';
+import 'package:gajacash_sample/core/widgets/speech_bubble.dart';
 import 'package:gajacash_sample/core/widgets/phone_input_field.dart';
+import 'package:gajacash_sample/core/constants/countries.dart';
+import 'package:gajacash_sample/core/widgets/inset_neumorphic_container.dart';
 
 class PhoneEntryScreen extends StatelessWidget {
   const PhoneEntryScreen({super.key});
@@ -15,6 +18,7 @@ class PhoneEntryScreen extends StatelessWidget {
     final controller = Get.put(PhoneEntryController());
 
     return Scaffold(
+      backgroundColor: AppColors.phoneFrameBg,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(
@@ -110,12 +114,28 @@ class PhoneEntryScreen extends StatelessWidget {
   }
 
   Widget _buildMascotSection() {
-    return const MascotBubble(
-      messages: [
-        "If you already have an account, we’ll prompt you to log in. If not, we’ll guide you through a quick registration.",
-        "Enter your mobile number to continue.",
+    return Column(
+      children: [
+        const SpeechBubble(
+          texts: [
+            "If you already have an account, we’ll prompt you to log in. If not, we’ll guide you through a quick registration.",
+            "Enter your mobile number to continue.",
+          ],
+        ),
+        Expanded(
+          child: Transform.translate(
+            offset: const Offset(0, -16),
+            child: Transform.scale(
+              scale: 0.9,
+              child: Image.asset(
+                'assets/images/mascot.png',
+                fit: BoxFit.contain,
+                alignment: Alignment.bottomCenter,
+              ),
+            ),
+          ),
+        ),
       ],
-      mascotWidth: 170,
     );
   }
 
@@ -123,16 +143,16 @@ class PhoneEntryScreen extends StatelessWidget {
     BuildContext context,
     PhoneEntryController controller,
   ) {
-    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "Mobile number",
           style: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.w500,
-            color: theme.colorScheme.onSurface,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primaryText,
+            letterSpacing: -0.5,
           ),
         ),
         const SizedBox(height: 4),
@@ -140,12 +160,17 @@ class PhoneEntryScreen extends StatelessWidget {
           "Enter your mobile number",
           style: TextStyle(
             fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: theme.colorScheme.primary.withValues(alpha: 0.7),
+            fontWeight: FontWeight.w500,
+            color: AppColors.primaryGreen.withValues(alpha: 0.7),
           ),
         ),
         const SizedBox(height: 16),
-        PhoneInputField(controller: controller.phoneController),
+        Obx(() => PhoneInputField(
+          controller: controller.phoneController,
+          countryCode: controller.selectedCountry.value.code,
+          flagAssetPath: controller.selectedCountry.value.flagAsset,
+          onCountryCodeTap: () => _showCountryPicker(context, controller),
+        )),
       ],
     );
   }
@@ -183,10 +208,14 @@ class PhoneEntryScreen extends StatelessWidget {
       left: 0,
       right: 0,
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 32),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.4),
+            width: 1.0,
+          ),
           boxShadow: const [
             BoxShadow(
               color: Colors.black12,
@@ -199,37 +228,54 @@ class PhoneEntryScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 40,
+              width: 48,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.black12,
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
             const SizedBox(height: 24),
             const Text(
               "Is this number correct?",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryText,
+                letterSpacing: -0.5,
+              ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               "We'll send you a confirmation code there",
-              style: TextStyle(color: Colors.black54),
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: theme.colorScheme.primary.withValues(alpha: 0.7),
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  "+94 ",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  controller.phoneController.text,
-                  style: TextStyle(
+                Obx(() => Text(
+                  controller.selectedCountry.value.code,
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.primary,
+                    color: AppColors.primaryText,
+                    letterSpacing: 0.5,
+                  ),
+                )),
+                const SizedBox(width: 8),
+                Text(
+                  controller.phoneController.text,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryText,
+                    fontFamily: 'monospace',
+                    letterSpacing: 0.5,
                   ),
                 ),
               ],
@@ -250,6 +296,187 @@ class PhoneEntryScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showCountryPicker(BuildContext context, PhoneEntryController controller) {
+    final theme = Theme.of(context);
+    String searchQuery = '';
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final filteredCountries = CountryData.countries.where((country) {
+              final query = searchQuery.toLowerCase();
+              return country.name.toLowerCase().contains(query) ||
+                  country.code.contains(query);
+            }).toList();
+
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.75,
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 30,
+                    offset: Offset(0, -8),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Select Country",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryText,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  InsetNeumorphicContainer(
+                    borderRadius: 16,
+                    height: 48,
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchQuery = value;
+                        });
+                      },
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primaryText,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: "Search country name or code...",
+                        hintStyle: TextStyle(
+                          color: AppColors.primaryGreen.withValues(alpha: 0.4),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: AppColors.primaryGreen.withValues(alpha: 0.6),
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: filteredCountries.length,
+                      separatorBuilder: (context, index) => Divider(
+                        color: AppColors.primaryGreen.withValues(alpha: 0.1),
+                        height: 1,
+                      ),
+                      itemBuilder: (context, index) {
+                        final country = filteredCountries[index];
+                        return Obx(() {
+                          final isSelected = controller.selectedCountry.value.code == country.code;
+                          return InkWell(
+                            onTap: () {
+                              controller.selectedCountry.value = country;
+                              Navigator.pop(context);
+                            },
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? AppColors.primaryGreen.withValues(alpha: 0.05)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(2),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(alpha: 0.15),
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 1),
+                                        ),
+                                      ],
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(2),
+                                      child: country.flagAsset.startsWith('http')
+                                          ? Image.network(
+                                              country.flagAsset,
+                                              width: 32,
+                                              height: 20,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error, stackTrace) => Container(
+                                                color: Colors.grey[300],
+                                                width: 32,
+                                                height: 20,
+                                                alignment: Alignment.center,
+                                                child: const Icon(Icons.flag, size: 12),
+                                              ),
+                                            )
+                                          : Image.asset(
+                                              country.flagAsset,
+                                              width: 32,
+                                              height: 20,
+                                              fit: BoxFit.cover,
+                                            ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Text(
+                                      country.name,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.primaryText,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    country.code,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: isSelected
+                                          ? AppColors.primaryGreen
+                                          : AppColors.primaryText.withValues(alpha: 0.6),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
