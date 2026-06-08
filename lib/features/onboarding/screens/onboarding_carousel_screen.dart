@@ -44,7 +44,8 @@ class OnboardingCarouselScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.surface, // E8F4ED phone frame background
+      backgroundColor:
+          theme.colorScheme.surface, // E8F4ED phone frame background
       body: SafeArea(
         child: Column(
           children: [
@@ -53,9 +54,7 @@ class OnboardingCarouselScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const CustomBackButton(),
-                ],
+                children: [const CustomBackButton()],
               ),
             ),
 
@@ -65,7 +64,8 @@ class OnboardingCarouselScreen extends StatelessWidget {
                 controller: controller.pageController,
                 onPageChanged: controller.onPageChanged,
                 itemCount: _slides.length,
-                itemBuilder: (context, index) => _SlideWidget(slide: _slides[index]),
+                itemBuilder: (context, index) =>
+                    _SlideWidget(slide: _slides[index]),
               ),
             ),
 

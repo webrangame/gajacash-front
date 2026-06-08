@@ -5,7 +5,7 @@ class AppColors {
 
   static const Color background = Color(0xFFF5FAF7);
   static const Color phoneFrameBg = Color(0xFFE8F4ED);
-  static const Color primaryText = Color(0xFF1F1D1B);
+  static const Color primaryText = Color(0xFF1f1d1b);
   static const Color primaryGreen = Color(0xFF006633);
   static const Color clayShadowColor = Color(0xFFC5D1CB);
   static const Color white = Colors.white;
